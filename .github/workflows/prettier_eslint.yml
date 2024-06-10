@@ -6,8 +6,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      pull-requests: write
+      contents: write
 
     steps:
       - uses: actions/checkout@v4
@@ -24,11 +23,11 @@ jobs:
           npm install
           npm run prettier:run
         working-directory: frontend
+      
       - name: Commit prettier changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: [AUTO-GENERATED COMMIT] PRETTIER FORMATTING UPDATE
-          branch: ${{ github.head_ref }}
 
       - name: ESLint
         run: |
