@@ -8,9 +8,6 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-    defaults:
-      run:
-        working-directory: frontend
     steps:
       - name: Check for EXPO_TOKEN
         run: |
@@ -24,6 +21,7 @@ jobs:
 
       - name: Setup Node
         uses: actions/setup-node@v4
+        working-directory: frontend
         with:
           node-version: 18.x
           cache: npm
@@ -35,6 +33,7 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Install dependencies
+        working-directory: frontend-v2
         run: npm install
 
       - name: Create preview
