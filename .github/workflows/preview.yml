@@ -1,8 +1,5 @@
 name: preview
-on:
-  pull_request:
-    paths:
-      - frontend/**
+on: pull_request
 
 jobs:
   update:
@@ -27,6 +24,7 @@ jobs:
         with:
           node-version: 18.x
           cache: npm
+        working-directory: frontend
 
       - name: Setup EAS
         uses: expo/expo-github-action@v8
