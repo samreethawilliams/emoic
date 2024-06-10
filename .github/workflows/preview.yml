@@ -10,7 +10,7 @@ jobs:
       pull-requests: write
     defaults:
       run:
-        working-directory: ./frontend
+        working-directory: frontend
     steps:
       - name: Check for EXPO_TOKEN
         run: |
