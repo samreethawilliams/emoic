@@ -6,7 +6,7 @@ on:
 
 jobs:
   update:
-    name: EAS Update
+    name: Frontend generate preview
     runs-on: ubuntu-latest
     permissions:
       contents: read
