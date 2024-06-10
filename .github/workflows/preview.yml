@@ -37,6 +37,7 @@ jobs:
         working-directory: frontend
 
       - name: Create preview
+        working-directory: frontend
         uses: expo/expo-github-action/preview@v8
         with:
           command: eas update --auto
