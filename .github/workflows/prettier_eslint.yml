@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: '18.x'
 
-      - name: npm install, prettier:run
+      - name: Prettier
         run: |
           npm install
           npm run prettier:run
@@ -26,3 +26,9 @@ jobs:
         with:
           commit_message: [AUTO-GENERATED COMMIT] PRETTIER FORMATTING UPDATE
           branch: ${{ github.head_ref }}
+
+      - name: ESLint
+        run: |
+          npm install
+          npm run lint
+        working-directory: frontend
