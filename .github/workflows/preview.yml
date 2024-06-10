@@ -33,7 +33,7 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Install dependencies
-        working-directory: frontend-v2
+        working-directory: frontend
         run: npm install
 
       - name: Create preview
