@@ -1,1 +1,0 @@
-# Emoic Mobile App
