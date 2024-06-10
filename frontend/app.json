@@ -8,6 +8,15 @@
       "expo-router"
     ],
     "name": "frontend",
-    "slug": "frontend"
+    "slug": "frontend",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "2d00af0b-9914-4a45-949b-d71a56194325"
+      }
+    },
+    "owner": "rec0il99"
   }
 }
