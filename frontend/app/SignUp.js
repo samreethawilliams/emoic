@@ -1,11 +1,17 @@
-import { View, Text, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, Button } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useState } from 'react'
 import {Ionicons} from '@expo/vector-icons';
+import Checkbox from 'expo-checkbox'
+import { useNavigation } from '@react-navigation/native';
+import Login from "./Login";
 
 const SignUp = () => {
 
   const [isPasswordShown, setIsPasswordShown] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
+
+  const navigation = useNavigation();
 
   return (
     <SafeAreaView style={{flex:1, backgroundColor:'#fffaf0'}}>
@@ -158,6 +164,29 @@ const SignUp = () => {
                 </View>  
 
               </View>
+          <View style={{
+            flexDirection: 'row',
+            marginVertical:6
+          }}>
+            <Checkbox
+              style={{marginRight:8}}
+              value={isChecked}
+              onValueChange={setIsChecked}
+              color={isChecked ? '#2f4f4f': undefined}
+            />
+              <Text> I agree to the terms and conditions</Text>
+          </View>    
+
+            <Button
+              title='Sign Up'
+              onPress={() => navigation.navigate('Login')}
+              //filled
+              color={'#2f4f4f'}
+              style={{
+                marginTop:18,
+                marginBottom:4
+              }}
+            />
 
         </View>
     </SafeAreaView>
