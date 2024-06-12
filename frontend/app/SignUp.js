@@ -12,6 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Checkbox from "expo-checkbox";
 import { useNavigation } from "@react-navigation/native";
 import Login from "./Login";
+import EmoicLogo from "./svgs/EmoicLogo";
 
 const SignUp = () => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
@@ -23,10 +24,11 @@ const SignUp = () => {
     <SafeAreaView style={{ flex: 1, backgroundColor: "#f8f8ff" }}>
       <View style={{ flex: 1, marginHorizontal: 22 }}>
         <View style={{ marginBottom: 6, alignItems: "center" }}>
-          <Image
-            source={require("../assets/images/emonic_logo.png")}
+          {/* <Image
+            source={require("./emonic_logo.png")}
             style={{ width: 182, height: 180, marginBottom: 5 }}
-          />
+          /> */}
+          <EmoicLogo style={{ width: 100, height: 100 }} />
         </View>
 
         <View style={{ marginBottom: 12 }}>

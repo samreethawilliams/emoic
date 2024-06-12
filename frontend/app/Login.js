@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import EmoicLogo from "./svgs/EmoicLogo";
 
 const Login = () => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
@@ -14,10 +15,11 @@ const Login = () => {
     <SafeAreaView style={{ flex: 1, backgroundColor: "#f8f8ff" }}>
       <View style={{ flex: 1, marginHorizontal: 22 }}>
         <View style={{ marginBottom: 12, alignItems: "center" }}>
-          <Image
-            source={require("../assets/images/emonic_logo.png")}
+          {/* <Image
+            source={require("./assets/images/background.png")}
             style={{ width: 282, height: 280, marginBottom: 16 }}
-          />
+          /> */}
+          <EmoicLogo style={{ width: 100, height: 100 }} />
         </View>
 
         <View style={{ marginBottom: 12 }}>
