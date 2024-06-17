@@ -11,7 +11,6 @@ import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import Checkbox from "expo-checkbox";
 import { useNavigation } from "@react-navigation/native";
-import Login from "./Login";
 import EmoicLogo from "./svgs/EmoicLogo";
 
 const SignUp = () => {
@@ -207,7 +206,7 @@ const SignUp = () => {
 
         <Button
           title="Sign Up"
-          onPress={() => navigation.navigate("SignUp")}
+          onPress={() => navigation.navigate("")}
           //filled
           color={"#2f4f4f"}
           style={{
