@@ -3,6 +3,7 @@ import { Button } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
+import SignUp from "./SignUp";
 import { useNavigation } from "@react-navigation/native";
 import EmoicLogo from "./svgs/EmoicLogo";
 
@@ -14,7 +15,7 @@ const Login = () => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#f8f8ff" }}>
       <View style={{ flex: 1, marginHorizontal: 22 }}>
-        <View style={{ marginBottom: 12, alignItems: "center" }}>
+        <View style={{ marginBottom: 100, alignItems: "center" }}>
           {/* <Image
             source={require("./assets/images/background.png")}
             style={{ width: 282, height: 280, marginBottom: 16 }}
@@ -112,6 +113,24 @@ const Login = () => {
             marginBottom: 4,
           }}
         />
+
+        <View
+          style={{
+            marginTop: 16,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Text>
+            Don't have an account?{" "}
+            <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+              <Text style={{ color: "blue", marginVertical: -3 }}>
+                {" "}
+                Sign Up
+              </Text>
+            </TouchableOpacity>
+          </Text>
+        </View>
       </View>
     </SafeAreaView>
   );

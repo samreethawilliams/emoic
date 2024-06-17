@@ -23,7 +23,7 @@ const SignUp = () => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#f8f8ff" }}>
       <View style={{ flex: 1, marginHorizontal: 22 }}>
-        <View style={{ marginBottom: 6, alignItems: "center" }}>
+        <View style={{ marginBottom: 20, alignItems: "center" }}>
           {/* <Image
             source={require("./emonic_logo.png")}
             style={{ width: 182, height: 180, marginBottom: 5 }}
@@ -207,7 +207,7 @@ const SignUp = () => {
 
         <Button
           title="Sign Up"
-          onPress={() => navigation.navigate("Login")}
+          onPress={() => navigation.navigate("SignUp")}
           //filled
           color={"#2f4f4f"}
           style={{
