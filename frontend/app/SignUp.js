@@ -6,6 +6,8 @@ import {
   Button,
   Image,
 } from "react-native";
+import AudioRecord from "./AudioRecord";
+import UploadAudio from "./UploadAudio";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
@@ -214,6 +216,38 @@ const SignUp = () => {
             marginBottom: 4,
           }}
         />
+
+        <View
+          style={{
+            marginTop: 16,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Text>
+            Audio Upload Page{" "}
+            <TouchableOpacity
+              onPress={() => navigation.navigate("UploadAudio")}
+            >
+              <Text style={{ color: "blue", marginVertical: -3 }}>
+                {" "}
+                UploadAudio
+              </Text>
+            </TouchableOpacity>
+          </Text>
+
+          <Text>
+            Audio Record Page{" "}
+            <TouchableOpacity
+              onPress={() => navigation.navigate("AudioRecord")}
+            >
+              <Text style={{ color: "blue", marginVertical: -3 }}>
+                {" "}
+                AudioRecord
+              </Text>
+            </TouchableOpacity>
+          </Text>
+        </View>
       </View>
     </SafeAreaView>
   );
