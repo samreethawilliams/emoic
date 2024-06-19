@@ -3,9 +3,9 @@ import { Button } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import SignUp from "../pages/SignUp";
+import SignUp from "./SignUp";
 import { useNavigation } from "@react-navigation/native";
-import EmoicLogo from "../svgs/EmoicLogo";
+import EmoicLogo from "./svgs/EmoicLogo";
 
 const Login = () => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
@@ -107,7 +107,7 @@ const Login = () => {
           title="Login"
           onPress={() => navigation.navigate("")}
           //filled
-          color={"#3E8B9A"}
+          color={"#2f4f4f"}
           style={{
             marginTop: 18,
             marginBottom: 4,

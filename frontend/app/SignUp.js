@@ -13,7 +13,7 @@ import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import Checkbox from "expo-checkbox";
 import { useNavigation } from "@react-navigation/native";
-import EmoicLogo from "../svgs/EmoicLogo";
+import EmoicLogo from "./svgs/EmoicLogo";
 
 const SignUp = () => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);

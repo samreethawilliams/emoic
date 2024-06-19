@@ -1,6 +1,6 @@
 import { View, Text, Button } from "react-native";
-import Login from "../app/pages/Login";
-import SignUp from "../app/pages/SignUp";
+import Login from "./Login";
+import SignUp from "./SignUp";
 import { useNavigation } from "@react-navigation/native";
 
 const Home = () => {
