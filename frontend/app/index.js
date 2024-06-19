@@ -8,11 +8,14 @@ const Home = () => {
   const navigation = useNavigation();
   return (
     <View>
-      <EmoicLogo style={{ width: 100, height: 100 }} />
-      <Text>Dashboard</Text>
+      <View style={{ marginBottom: 100, alignItems: "center" }}>
+        <EmoicLogo style={{ width: 100, height: 100 }} />
+      </View>
+      <Text>Let the music reflect the emotions..</Text>
       <Button
-        title="Go to Sign Up"
+        title="Continue"
         onPress={() => navigation.navigate("Login")}
+        color={"#3E8B9A"}
       />
     </View>
   );
