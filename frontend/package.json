@@ -8,7 +8,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "eslint .",
-    "prettier:run": "prettier --write ."
+    "prettier": "prettier --write ."
   },
   "dependencies": {
     "@react-navigation/native": "^6.1.17",
