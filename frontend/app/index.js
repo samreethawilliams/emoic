@@ -16,7 +16,7 @@ const Home = () => {
       }}
     >
       <View style={{ marginBottom: 100, alignItems: "center" }}>
-        <EmoicLogo style={{ width: 100, height: 100 }} />
+        <EmoicLogo style={{ width: 120, height: 120 }} />
       </View>
       <Text
         style={{
@@ -31,7 +31,7 @@ const Home = () => {
       <Button
         title="Continue"
         onPress={() => navigation.navigate("Login")}
-        color={"3E8B9A"}
+        color="#3E8B9A"
       />
     </View>
   );
