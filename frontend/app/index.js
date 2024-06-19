@@ -8,7 +8,7 @@ const Home = () => {
   const navigation = useNavigation();
   return (
     <View>
-      <EmoicLogo />
+      <EmoicLogo style={{ width: 100, height: 100 }} />
       <Text>Dashboard</Text>
       <Button
         title="Go to Sign Up"
