@@ -107,7 +107,7 @@ const Login = () => {
           title="Login"
           onPress={() => navigation.navigate("")}
           //filled
-          color={"#2f4f4f"}
+          color={"#3E8B9A"}
           style={{
             marginTop: 18,
             marginBottom: 4,
