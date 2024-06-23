@@ -1,7 +1,7 @@
 import { View, Text, Button } from "react-native";
 import Login from "./Login";
 import SignUp from "./SignUp";
-import Player from "./Player";
+import Player from "./player";
 import EmoicLogo from "./svgs/EmoicLogo";
 import { useNavigation } from "@react-navigation/native";
 
