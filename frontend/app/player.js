@@ -5,16 +5,18 @@ import Icon from "react-native-vector-icons/FontAwesome";
 const player = () => {
   return (
     <View
-      style={{ flex: 1, alignItems: "center", marginTop: 30, marginBottom: 30 }}
+      style={{ flex: 1, alignItems: "center", marginTop: 50, marginBottom: 50 }}
     >
       <Image
         source={{
           uri: "https://rocketium.com/is/wp-content/uploads/2021/04/undraw_compose_music_ovo2.png",
         }}
-        style={{ width: 100, height: 100, borderRadius: 75 }}
+        style={{ width: 200, height: 200, borderRadius: 100 }}
       />
-      <View style={{ marginTop: 30, marginBottom: 30 }}>
-        <Text>Name of the Audio</Text>
+      <View style={{ marginTop: 50, marginBottom: 20 }}>
+        <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+          Name of the Audio
+        </Text>
       </View>
       <View style={{ marginBottom: 30 }}>
         <Text>Artist</Text>
