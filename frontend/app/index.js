@@ -1,6 +1,7 @@
 import { View, Text, Button } from "react-native";
 import Login from "./Login";
 import SignUp from "./SignUp";
+import Player from "./player";
 import EmoicLogo from "./svgs/EmoicLogo";
 import { useNavigation } from "@react-navigation/native";
 
@@ -31,6 +32,11 @@ const Home = () => {
       <Button
         title="Continue"
         onPress={() => navigation.navigate("Login")}
+        color="#3E8B9A"
+      />
+      <Button
+        title="Player"
+        onPress={() => navigation.navigate("Player")}
         color="#3E8B9A"
       />
     </View>
