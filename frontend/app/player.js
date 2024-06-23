@@ -5,7 +5,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 const player = () => {
   return (
     <View
-      style={{ flex: 1, alignItems: "center", marginTop: 20, marginBottom: 20 }}
+      style={{ flex: 1, alignItems: "center", marginTop: 30, marginBottom: 30 }}
     >
       <Image
         source={{
@@ -13,17 +13,17 @@ const player = () => {
         }}
         style={{ width: 100, height: 100, borderRadius: 75 }}
       />
-      <View style={{ marginTop: 20, marginBottom: 20 }}>
+      <View style={{ marginTop: 30, marginBottom: 30 }}>
         <Text>Name of the Audio</Text>
       </View>
-      <View style={{ marginTop: 20, marginBottom: 20 }}>
+      <View style={{ marginBottom: 30 }}>
         <Text>Artist</Text>
       </View>
       <TouchableOpacity
-        style={{ backgroundColor: "#3E8B9A", borderRadius: 75 }}
+        style={{ backgroundColor: "#3E8B9A", borderRadius: 100, padding: 10 }}
         onPress={() => {}}
       >
-        <Icon name="Pause" size={50} color="#fff" />
+        <Icon name="pause" size={20} color="#fff" />
       </TouchableOpacity>
     </View>
   );
