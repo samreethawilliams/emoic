@@ -1,6 +1,7 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import Icon from "react-native-vector-icons/FontAwesome";
+import Footer from "./components/footer";
 
 const player = () => {
   return (
@@ -27,6 +28,9 @@ const player = () => {
       >
         <Icon name="pause" size={20} color="#fff" />
       </TouchableOpacity>
+      <View style={{ alignItems: "center", marginTop: 200 }}>
+        <Footer />
+      </View>
     </View>
   );
 };
