@@ -6,7 +6,7 @@ const Player = () => {
     <View style={{ flex: 1, alignItems: "center" }}>
       <Image
         source={{
-          url: "https://rocketium.com/is/wp-content/uploads/2021/04/undraw_compose_music_ovo2.png",
+          uri: "https://rocketium.com/is/wp-content/uploads/2021/04/undraw_compose_music_ovo2.png",
         }}
         style={{ width: 100, height: 100 }}
       />
