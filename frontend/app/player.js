@@ -1,9 +1,12 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, Button } from "react-native";
 import React from "react";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Footer from "./components/footer";
+import { useNavigation } from "@react-navigation/native";
+import dashboard from "./dashboard";
 
 const player = () => {
+  const navigation = useNavigation();
   return (
     <View
       style={{ flex: 1, alignItems: "center", marginTop: 50, marginBottom: 50 }}
@@ -28,7 +31,14 @@ const player = () => {
       >
         <Icon name="pause" size={20} color="#fff" />
       </TouchableOpacity>
-      <View style={{ alignItems: "center", marginTop: 200 }}>
+      <View style={{ marginTop: 50, alignItems: "center" }}>
+        <Button
+          title="Go to Dashboard"
+          onPress={() => navigation.navigate("dashboard")}
+          color="#3E8B9A"
+        />
+      </View>
+      <View style={{ alignItems: "center", marginTop: 120 }}>
         <Footer />
       </View>
     </View>
