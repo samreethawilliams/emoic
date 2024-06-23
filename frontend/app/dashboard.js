@@ -1,6 +1,8 @@
-import { View, Text, FlatList } from "react-native";
+import { View, Text, FlatList, Button } from "react-native";
 import React from "react";
 import Footer from "./components/footer";
+import player from "./player";
+import { useNavigation } from "@react-navigation/native";
 
 const dashboard = () => {
   const audioHistory = [
@@ -16,6 +18,7 @@ const dashboard = () => {
       <Text>{item.name}</Text>
     </View>
   );
+  const navigation = useNavigation();
   return (
     <View style={{ flex: 1 }}>
       <View style={{ marginBottom: 20, marginTop: 20 }}>
@@ -29,6 +32,13 @@ const dashboard = () => {
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
       />
+      <View style={{ marginTop: 50, alignItems: "center" }}>
+        <Button
+          title="AudioPlayer"
+          onPress={() => navigation.navigate("player")}
+          color="#3E8B9A"
+        />
+      </View>
       <View style={{ alignItems: "center" }}>
         <Footer />
       </View>
