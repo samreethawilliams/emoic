@@ -29,10 +29,10 @@ const SignUp = () => {
             source={require("./emonic_logo.png")}
             style={{ width: 182, height: 180, marginBottom: 5 }}
           /> */}
-          <EmoicLogo style={{ width: 100, height: 100 }} />
+          <EmoicLogo style={{ width: 160, height: 160 }} />
         </View>
 
-        <View style={{ marginBottom: 12 }}>
+        <View style={{ marginBottom: 12, marginTop: -35 }}>
           <Text
             style={{
               fontSize: 16,
@@ -206,47 +206,21 @@ const SignUp = () => {
           <Text> I agree to the terms and conditions</Text>
         </View>
 
-        <Button
-          title="Sign Up"
-          onPress={() => navigation.navigate("")}
-          //filled
-          color={"#2f4f4f"}
-          style={{
-            marginTop: 18,
-            marginBottom: 4,
-          }}
-        />
-
-        <View
-          style={{
-            marginTop: 16,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Text>
-            Audio Upload Page{" "}
-            <TouchableOpacity
-              onPress={() => navigation.navigate("UploadAudio")}
-            >
-              <Text style={{ color: "blue", marginVertical: -3 }}>
-                {" "}
-                UploadAudio
-              </Text>
-            </TouchableOpacity>
-          </Text>
-
-          <Text>
-            Audio Record Page{" "}
-            <TouchableOpacity
-              onPress={() => navigation.navigate("AudioRecord")}
-            >
-              <Text style={{ color: "blue", marginVertical: -3 }}>
-                {" "}
-                AudioRecord
-              </Text>
-            </TouchableOpacity>
-          </Text>
+        <View style={{ marginTop: 18, marginBottom: 4 }}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("")}
+            style={{
+              backgroundColor: "#3E8B9A",
+              alignItems: "center",
+              justifyContent: "center",
+              height: 48,
+              borderRadius: 8,
+            }}
+          >
+            <Text style={{ color: "#fff", fontSize: 16, fontWeight: "bold" }}>
+              Sign Up
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>
