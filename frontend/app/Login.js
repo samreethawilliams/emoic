@@ -20,10 +20,10 @@ const Login = () => {
             source={require("./assets/images/background.png")}
             style={{ width: 282, height: 280, marginBottom: 16 }}
           /> */}
-          <EmoicLogo style={{ width: 100, height: 100 }} />
+          <EmoicLogo style={{ width: 160, height: 160 }} />
         </View>
 
-        <View style={{ marginBottom: 12 }}>
+        <View style={{ marginBottom: 12, marginTop: -35 }}>
           <Text
             style={{
               fontSize: 16,
@@ -103,16 +103,22 @@ const Login = () => {
           </View>
         </View>
 
-        <Button
-          title="Login"
-          onPress={() => navigation.navigate("")}
-          //filled
-          color={"#3E8B9A"}
-          style={{
-            marginTop: 18,
-            marginBottom: 4,
-          }}
-        />
+        <View style={{ marginTop: 18, marginBottom: 4 }}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("")}
+            style={{
+              backgroundColor: "#3E8B9A",
+              alignItems: "center",
+              justifyContent: "center",
+              height: 48,
+              borderRadius: 8,
+            }}
+          >
+            <Text style={{ color: "#fff", fontSize: 16, fontWeight: "bold" }}>
+              Login
+            </Text>
+          </TouchableOpacity>
+        </View>
 
         <View
           style={{
