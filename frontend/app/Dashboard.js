@@ -1,4 +1,11 @@
-import { View, Text, FlatList, Button, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  Button,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 import React from "react";
 import Player from "./Player";
 import { useNavigation } from "@react-navigation/native";
@@ -18,9 +25,9 @@ const Dashboard = () => {
     <View
       style={{
         backgroundColor: "white",
-        padding: 15,
         borderRadius: 8,
         marginBottom: 8,
+        width: "100%",
       }}
     >
       <Text>{item.name}</Text>
@@ -28,7 +35,13 @@ const Dashboard = () => {
   );
   const navigation = useNavigation();
   return (
-    <View style={{ flex: 1, alignItems: "center" }}>
+    <View
+      style={{
+        flex: 1,
+        alignItems: "center",
+        padding: 20,
+      }}
+    >
       <View
         style={{
           marginBottom: 20,
@@ -46,20 +59,24 @@ const Dashboard = () => {
           <Icon name="plus" size={20} color="#fff" />
         </TouchableOpacity>
       </View>
-      <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>
-        Audio History
-      </Text>
-      <FlatList
-        data={audioHistory}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-      />
-      <View style={{ marginTop: 10, alignItems: "center", marginBottom: 250 }}>
-        <Button
-          title="AudioPlayer"
-          onPress={() => navigation.navigate("Player")}
-          color="#3E8B9A"
+      <View style={{ width: "100%" }}>
+        <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>
+          Audio History
+        </Text>
+        <FlatList
+          data={audioHistory}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
         />
+        <View
+          style={{ marginTop: 10, alignItems: "center", marginBottom: 250 }}
+        >
+          <Button
+            title="AudioPlayer"
+            onPress={() => navigation.navigate("Player")}
+            color="#3E8B9A"
+          />
+        </View>
       </View>
       <View style={{ alignItems: "center", bottom: 0 }}>
         <Footer />
