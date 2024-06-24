@@ -3,7 +3,7 @@ import React from "react";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Footer from "./components/footer";
 import { useNavigation } from "@react-navigation/native";
-import dashboard from "./dashboard";
+import Dashboard from "./dashboard";
 
 const player = () => {
   const navigation = useNavigation();
