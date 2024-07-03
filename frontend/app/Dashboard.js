@@ -51,16 +51,20 @@ const Dashboard = () => {
         style={{
           marginBottom: 20,
           marginTop: 20,
-          flexDirection: "row",
         }}
       >
         <Image
           source={{
             uri: "https://c8.alamy.com/zooms/9/d4c59d90389444e3b1166312d2f7fa51/p9mywr.jpg",
           }}
-          style={{ width: 50, height: 50, borderRadius: 100, marginRight: 30 }}
+          style={{
+            width: 100,
+            height: 100,
+            borderRadius: 100,
+            marginRight: 30,
+          }}
         />
-        <Text style={{ fontSize: 24, fontWeight: "bold", marginRight: 40 }}>
+        <Text style={{ fontSize: 24, fontWeight: "bold", marginTop: 10 }}>
           Hi, Joel
         </Text>
         {/* <TouchableOpacity
@@ -128,7 +132,14 @@ const Dashboard = () => {
           <Icon name="plus" size={20} color="#fff" />
         </TouchableOpacity>
       </View>
-      <View style={{ alignItems: "center", width: "100%" }}>
+      <View
+        style={{
+          alignItems: "center",
+          width: "100%",
+          position: "relative",
+          bottom: 0,
+        }}
+      >
         <Footer />
       </View>
     </View>
