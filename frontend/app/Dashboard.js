@@ -5,6 +5,7 @@ import {
   Button,
   TouchableOpacity,
   Dimensions,
+  Image,
 } from "react-native";
 import React from "react";
 import Player from "./Player";
@@ -26,8 +27,9 @@ const Dashboard = () => {
       style={{
         backgroundColor: "white",
         borderRadius: 8,
-        marginBottom: 8,
+        marginBottom: 20,
         width: "100%",
+        padding: 10,
       }}
     >
       <Text>{item.name}</Text>
@@ -49,25 +51,33 @@ const Dashboard = () => {
           flexDirection: "row",
         }}
       >
+        <Image
+          source={{
+            uri: "https://c8.alamy.com/zooms/9/d4c59d90389444e3b1166312d2f7fa51/p9mywr.jpg",
+          }}
+          style={{ width: 50, height: 50, borderRadius: 100, marginRight: 30 }}
+        />
         <Text style={{ fontSize: 24, fontWeight: "bold", marginRight: 40 }}>
           Hi, Joel
         </Text>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={{ backgroundColor: "#3E8B9A", padding: 6, borderRadius: 100 }}
           onPress={() => {}}
         >
           <Icon name="plus" size={20} color="#fff" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       <View style={{ width: "100%" }}>
         <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>
           Audio History
         </Text>
-        <FlatList
-          data={audioHistory}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-        />
+        <View style={{ padding: 10, marginBottom: 20 }}>
+          <FlatList
+            data={audioHistory}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+          />
+        </View>
         <View
           style={{ marginTop: 10, alignItems: "center", marginBottom: 250 }}
         >
@@ -78,7 +88,27 @@ const Dashboard = () => {
           />
         </View>
       </View>
-      <View style={{ alignItems: "center", bottom: 0 }}>
+
+      <View
+        style={{
+          bottom: 20,
+          alignItems: "center",
+          right: 20,
+        }}
+      >
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#3E8B9A",
+            padding: 15,
+            borderRadius: 50,
+            elevation: 5,
+          }}
+          onPress={() => {}}
+        >
+          <Icon name="plus" size={20} color="#fff" />
+        </TouchableOpacity>
+      </View>
+      <View style={{ alignItems: "center", bottom: 0, width: "100%" }}>
         <Footer />
       </View>
     </View>
