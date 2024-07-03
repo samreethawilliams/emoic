@@ -102,7 +102,6 @@ const Dashboard = () => {
         </View>
         <View
           style={{
-            marginTop: 5,
             alignItems: "center",
           }}
         >
