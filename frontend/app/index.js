@@ -22,7 +22,7 @@ const Home = () => {
       <Text
         style={{
           fontSize: 32,
-          fontWeight: "semibold",
+          fontWeight: "bold",
           textAlign: "center",
           marginBottom: 50,
         }}
