@@ -15,11 +15,10 @@ import Icon from "react-native-vector-icons/FontAwesome";
 
 const Dashboard = () => {
   const audioHistory = [
-    { id: "1", name: "Audio File 1" },
-    { id: "2", name: "Audio File 2" },
-    { id: "3", name: "Audio File 3" },
-    { id: "4", name: "Audio File 4" },
-    { id: "5", name: "Audio File 5" },
+    { id: "1", name: "Audio File 1", emoticon: "😊" },
+    { id: "2", name: "Audio File 2", emoticon: "☹️" },
+    { id: "3", name: "Audio File 3", emoticon: "😭" },
+    { id: "4", name: "Audio File 4", emoticon: "😡" },
   ];
 
   const renderItem = ({ item }) => (
@@ -30,9 +29,13 @@ const Dashboard = () => {
         marginBottom: 20,
         width: "100%",
         padding: 10,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
       }}
     >
-      <Text>{item.name}</Text>
+      <Text style={{ fontSize: 16 }}>{item.name}</Text>
+      <Text style={{ fontSize: 24 }}>{item.emoticon}</Text>
     </View>
   );
   const navigation = useNavigation();
@@ -67,11 +70,26 @@ const Dashboard = () => {
           <Icon name="plus" size={20} color="#fff" />
         </TouchableOpacity> */}
       </View>
-      <View style={{ width: "100%" }}>
-        <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>
+      <View
+        style={{
+          width: "100%",
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: "bold",
+            marginBottom: 20,
+          }}
+        >
           Audio History
         </Text>
-        <View style={{ padding: 10, marginBottom: 20 }}>
+        <View
+          style={{
+            padding: 10,
+            marginBottom: 20,
+          }}
+        >
           <FlatList
             data={audioHistory}
             renderItem={renderItem}
@@ -79,7 +97,10 @@ const Dashboard = () => {
           />
         </View>
         <View
-          style={{ marginTop: 10, alignItems: "center", marginBottom: 250 }}
+          style={{
+            marginTop: 5,
+            alignItems: "center",
+          }}
         >
           <Button
             title="AudioPlayer"
@@ -91,15 +112,14 @@ const Dashboard = () => {
 
       <View
         style={{
-          bottom: 20,
           alignItems: "center",
-          right: 20,
         }}
       >
         <TouchableOpacity
           style={{
+            marginTop: 10,
             backgroundColor: "#3E8B9A",
-            padding: 15,
+            padding: 10,
             borderRadius: 50,
             elevation: 5,
           }}
@@ -108,7 +128,7 @@ const Dashboard = () => {
           <Icon name="plus" size={20} color="#fff" />
         </TouchableOpacity>
       </View>
-      <View style={{ alignItems: "center", bottom: 0, width: "100%" }}>
+      <View style={{ alignItems: "center", width: "100%" }}>
         <Footer />
       </View>
     </View>
