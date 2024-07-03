@@ -14,9 +14,11 @@ const AudioRecord = () => {
           allowsRecordingIOS: true,
           playsInSilentModeIOS: true,
         });
-        const { recording } = await Audio.Recording.createAsync(
+        const recording = new Audio.Recording();
+        await recording.prepareToRecordAsync(
           Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY,
         );
+        await recording.startAsync();
         setRecording(recording);
       }
     } catch (err) {
