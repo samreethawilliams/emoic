@@ -208,7 +208,7 @@ const SignUp = () => {
 
         <View style={{ marginTop: 18, marginBottom: 4 }}>
           <TouchableOpacity
-            onPress={() => navigation.navigate("")}
+            onPress={() => navigation.navigate("AudioRecord")}
             style={{
               backgroundColor: "#3E8B9A",
               alignItems: "center",
