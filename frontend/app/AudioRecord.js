@@ -15,6 +15,7 @@ const AudioRecord = () => {
           playsInSilentModeIOS: true,
         });
         const recording = new Audio.Recording();
+        /* eslint-disable import/namespace */
         await recording.prepareToRecordAsync(
           Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY,
         );
