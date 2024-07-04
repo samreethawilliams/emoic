@@ -1,12 +1,12 @@
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
-const ffmpeg = require("fluent-ffmpeg");
 const { sync } = require("cross-spawn");
 
 const storage = multer.diskStorage({
   filename: function (req, file, cb) {
-    cb(null, file.originalname);
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, file.fieldname + "-" + uniqueSuffix + ".mp3");
   },
   destination: function (req, file, cb) {
     cb(null, "./uploads");
@@ -24,8 +24,8 @@ app.get("/", (req, res) => {
   res.json("Emoic says hello!!");
 });
 
-app.post("/upload_files", upload.single("file"), (req, res) => {
-  const originalFileName = req.file.originalname;
+app.post("/upload_files", upload.single("file"), async (req, res) => {
+  const originalFileName = req.file.filename;
   process.chdir("/Users/joelmathew/WebProjects/emoic/backend/uploads");
   const [fileName] = originalFileName.split(".mp3");
 
