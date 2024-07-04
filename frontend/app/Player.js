@@ -4,6 +4,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import Footer from "./components/footer";
 import { useNavigation } from "@react-navigation/native";
 import Dashboard from "./Dashboard";
+import Slider from "@react-native-community/slider";
 
 const Player = () => {
   const navigation = useNavigation();
@@ -31,6 +32,13 @@ const Player = () => {
       >
         <Icon name="pause" size={20} color="#fff" />
       </TouchableOpacity>
+      <Slider
+        style={{ width: 200, height: 40 }}
+        minimumValue={0}
+        maximumValue={1}
+        minimumTrackTintColor="#FFFFFF"
+        maximumTrackTintColor="#000000"
+      />
       <View style={{ marginTop: 50, alignItems: "center" }}>
         <Button
           title="Go to Dashboard"
