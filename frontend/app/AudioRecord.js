@@ -108,9 +108,9 @@ const AudioRecord = () => {
           color="white"
         />
       </TouchableOpacity>
-      <Text
-        style={styles.recordingStatusText}
-      >{`Recording status: ${recordingStatus}`}</Text>
+      <Text style={styles.recordingStatusText}>
+        {`Recording status: ${recordingStatus}`}
+      </Text>
 
       {recordingStatus === "stopped" && (
         <View style={{ marginTop: 58, marginBottom: 2 }}>
@@ -118,7 +118,7 @@ const AudioRecord = () => {
             onPress={() => navigation.navigate("Player")}
             style={styles.continueButton}
           >
-            <Text style={styles.continueButtonText}>Continue </Text>
+            <Text style={styles.continueButtonText}>Continue</Text>
           </TouchableOpacity>
         </View>
       )}
