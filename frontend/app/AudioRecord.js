@@ -45,6 +45,7 @@ const AudioRecord = () => {
 
       const newRecording = new Audio.Recording();
       console.log("Starting Recording");
+      /* eslint-disable import/namespace */
       await newRecording.prepareToRecordAsync(
         Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY,
       );
