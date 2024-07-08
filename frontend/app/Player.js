@@ -22,13 +22,14 @@ const Player = () => {
         borderRadius: 30,
       }}
     >
+      <Bg style={{ height: 1000, width: 10 }} />
       <Image
         source={{
           uri: "https://cdn.pixabay.com/photo/2017/03/05/21/55/emoticon-2120024_640.png",
         }}
         style={{ width: 200, height: 200, borderRadius: 100 }}
       />
-      <View style={{ marginTop: 50, marginBottom: 20 }}>
+      <View style={{ marginTop: 30, marginBottom: 20 }}>
         <Text style={{ fontSize: 20, fontWeight: "bold" }}>
           Name of the Audio
         </Text>
@@ -37,7 +38,12 @@ const Player = () => {
         <Text>Artist</Text>
       </View>
       <TouchableOpacity
-        style={{ backgroundColor: "#3E8B9A", borderRadius: 100, padding: 10 }}
+        style={{
+          backgroundColor: "#3E8B9A",
+          borderRadius: 100,
+          padding: 10,
+          marginBottom: 10,
+        }}
         onPress={() => {}}
       >
         <Icon name="pause" size={20} color="#fff" />
@@ -50,26 +56,24 @@ const Player = () => {
         maximumTrackTintColor="#000000"
         disabled={true}
       />
-      <Text
-        style={{
-          marginTop: 30,
-          paddingHorizontal: 10,
-          paddingVertical: 10,
-          backgroundColor: "#3E8B9A",
-          borderRadius: 20,
-          fontSize: 14,
-        }}
-      >
-        {lyrics}
-      </Text>
-      <Bg style={{ height: 20, width: 20 }} />
-      <View style={{ marginTop: 50, alignItems: "center" }}>
+      <View style={{ alignItems: "center" }}>
         <Button
           title="Go to Dashboard"
           onPress={() => navigation.navigate("Dashboard")}
           color="#3E8B9A"
         />
       </View>
+      <Text
+        style={{
+          marginTop: 30,
+          backgroundColor: "#3E8B9A",
+          borderRadius: 20,
+          fontSize: 14,
+          textAlign: "center",
+        }}
+      >
+        {lyrics}
+      </Text>
       <View style={{ alignItems: "center", marginTop: 120 }}>
         <Footer />
       </View>
