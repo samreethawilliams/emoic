@@ -12,6 +12,7 @@ import Footer from "./components/footer";
 import { useNavigation } from "@react-navigation/native";
 import Slider from "@react-native-community/slider";
 import { Audio } from "expo-av";
+import Bg from "./svgs/Bg";
 
 const Player = () => {
   const navigation = useNavigation();
@@ -95,6 +96,7 @@ const Player = () => {
         borderRadius: 30,
       }}
     >
+      <Bg style={{ height: 300, width: 300 }} />
       <Image
         source={{
           uri: "https://cdn.pixabay.com/photo/2017/03/05/21/55/emoticon-2120024_640.png",
@@ -110,7 +112,7 @@ const Player = () => {
         <Text>Artist</Text>
       </View>
       <Slider
-        style={{ width: 400, height: 50, marginLeft: 20, marginRight: 20 }}
+        style={{ width: 300, height: 50, marginLeft: 20, marginRight: 20 }}
         minimumValue={0}
         maximumValue={1}
         value={getSliderValue()}
@@ -122,7 +124,7 @@ const Player = () => {
         style={{
           flexDirection: "row",
           justifyContent: "space-between",
-          width: 400,
+          width: 300,
           marginLeft: 20,
           marginRight: 20,
         }}
