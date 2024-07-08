@@ -12,7 +12,6 @@ import Footer from "./components/footer";
 import { useNavigation } from "@react-navigation/native";
 import Dashboard from "./Dashboard";
 import Slider from "@react-native-community/slider";
-import Bg from "./svgs/Bg";
 
 const Player = () => {
   const navigation = useNavigation();
@@ -29,7 +28,6 @@ const Player = () => {
         borderRadius: 30,
       }}
     >
-      <Bg />
       <Image
         source={{
           uri: "https://cdn.pixabay.com/photo/2017/03/05/21/55/emoticon-2120024_640.png",
