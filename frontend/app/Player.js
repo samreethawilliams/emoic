@@ -10,13 +10,49 @@ import React from "react";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Footer from "./components/footer";
 import { useNavigation } from "@react-navigation/native";
-import Dashboard from "./Dashboard";
 import Slider from "@react-native-community/slider";
+import { useEffect, useState } from "react";
+import { Audio } from "expo-av";
 
 const Player = () => {
   const navigation = useNavigation();
   const lyrics =
     "Twinkle, twinkle, little star,How I wonder what you are!Up above the world so high,Like a diamond in the sky.";
+
+  const [sound, setSound] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  async function playPauseSound() {
+    if (isPlaying) {
+      console.log("Pausing Sound");
+      await sound.pauseAsync();
+      setIsPlaying(false);
+    } else {
+      if (sound) {
+        console.log("Resuming Sound");
+        await sound.playAsync();
+      } else {
+        console.log("Loading Sound");
+        const { sound } = await Audio.Sound.createAsync(
+          require("../assets/sounds/sample.mp3"),
+        );
+        setSound(sound);
+        console.log("Playing Sound");
+        await sound.playAsync();
+      }
+      setIsPlaying(true);
+    }
+  }
+
+  useEffect(() => {
+    return sound
+      ? () => {
+          console.log("Unloading Sound");
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
+
   return (
     <View
       style={{
@@ -43,7 +79,7 @@ const Player = () => {
         <Text>Artist</Text>
       </View>
       <Slider
-        style={{ width: 400, height: 50 }}
+        style={{ width: 400, height: 50, marginLeft: 20, marginRight: 20 }}
         minimumValue={0}
         maximumValue={1}
         minimumTrackTintColor="#FFFFFF"
@@ -57,9 +93,9 @@ const Player = () => {
           padding: 20,
           marginBottom: 10,
         }}
-        onPress={() => {}}
+        onPress={playPauseSound}
       >
-        <Icon name="pause" size={30} color="#fff" />
+        <Icon name={isPlaying ? "pause" : "play"} size={30} color="#fff" />
       </TouchableOpacity>
       <View style={{ alignItems: "center" }}>
         <Button
