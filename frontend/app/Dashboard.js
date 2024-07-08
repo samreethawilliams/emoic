@@ -11,7 +11,6 @@ import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import Footer from "./components/footer";
 import Icon from "react-native-vector-icons/FontAwesome";
-import Bg from "./svgs/Bg";
 
 const Dashboard = () => {
   const audioHistory = [
@@ -47,7 +46,6 @@ const Dashboard = () => {
         padding: 20,
       }}
     >
-      <Bg style={{ height: 1000, width: 1000 }} />
       <View
         style={{
           marginBottom: 20,
