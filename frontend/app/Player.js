@@ -17,7 +17,7 @@ import Footer from "./components/footer";
 const Player = () => {
   const navigation = useNavigation();
   const lyrics =
-    "Twinkle, twinkle, little star,How I wonder what you are!Up above the world so high,Like a diamond in the sky.";
+    "Twinkle, twinkle, little star, How I wonder what you are! Up above the world so high, Like a diamond in the sky.";
 
   const [sound, setSound] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -165,15 +165,15 @@ const Player = () => {
         <ScrollView
           style={{
             marginTop: 30,
-            backgroundColor: "white",
+            backgroundColor: "#F0F0F0",
             borderRadius: 20,
-            padding: 50,
+            padding: 20,
             height: 300,
           }}
         >
           <Text
             style={{
-              fontSize: 14,
+              fontSize: 24,
               textAlign: "center",
             }}
           >
