@@ -1,97 +1,128 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import React, { useState, useEffect } from "react";
 import { Audio } from "expo-av";
+import * as FileSystem from "expo-file-system";
+import { FontAwesome } from "@expo/vector-icons";
+import Player from "./Player";
+import { useNavigation } from "@react-navigation/native";
 
 const AudioRecord = () => {
-  const [recording, setRecording] = useState();
-  const [recordings, setRecordings] = useState([]);
+  const [recording, setRecording] = useState(null);
+  const [recordingStatus, setRecordingStatus] = useState("idle");
+  const [audioPermission, setAudioPermission] = useState(null);
+
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    async function getPermission() {
+      await Audio.requestPermissionsAsync()
+        .then((permission) => {
+          console.log("Permission Granted: " + permission.granted);
+          setAudioPermission(permission.granted);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    getPermission();
+
+    return () => {
+      if (recording) {
+        stopRecording();
+      }
+    };
+  }, [recording]);
 
   async function startRecording() {
     try {
-      const perm = await Audio.requestPermissionsAsync();
-      if (perm.status === "granted") {
+      if (audioPermission) {
         await Audio.setAudioModeAsync({
           allowsRecordingIOS: true,
           playsInSilentModeIOS: true,
         });
-        const recording = new Audio.Recording();
-        /* eslint-disable import/namespace */
-        await recording.prepareToRecordAsync(
-          Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY,
-        );
-        await recording.startAsync();
-        setRecording(recording);
       }
-    } catch (err) {
-      console.error("Failed to start recording", err);
+
+      const newRecording = new Audio.Recording();
+      console.log("Starting Recording");
+      /* eslint-disable import/namespace */
+      await newRecording.prepareToRecordAsync(
+        Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY,
+      );
+      await newRecording.startAsync();
+      setRecording(newRecording);
+      setRecordingStatus("recording");
+    } catch (error) {
+      console.error("Failed to start recording", error);
     }
   }
 
   async function stopRecording() {
-    setRecording(undefined);
-
-    await recording.stopAndUnloadAsync();
-    let allRecordings = [...recordings];
-    const { sound, status } = await recording.createNewLoadedSoundAsync();
-    await sound.setVolumeAsync(1.0); // Set volume to maximum
-    allRecordings.push({
-      sound: sound,
-      duration: getDurationFormatted(status.durationMillis),
-      file: recording.getURI(),
-    });
-
-    setRecordings(allRecordings);
-  }
-
-  function getDurationFormatted(milliseconds) {
-    const minutes = Math.floor(milliseconds / 1000 / 60);
-    const seconds = Math.round((milliseconds / 1000) % 60);
-    return seconds < 10 ? `${minutes}:0${seconds}` : `${minutes}:${seconds}`;
-  }
-
-  function getRecordingLines() {
-    return recordings.map((recordingLine, index) => (
-      <View key={index} style={styles.row}>
-        <Text style={styles.fill}>
-          Recording #{index + 1} | {recordingLine.duration}
-        </Text>
-        <Button
-          onPress={() => handlePlay(recordingLine.sound)}
-          title="Play"
-        ></Button>
-      </View>
-    ));
-  }
-
-  async function handlePlay(sound) {
     try {
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: false,
-        staysActiveInBackground: true,
-        playsInSilentModeIOS: true,
-      });
-      await sound.setVolumeAsync(1.0); // Set volume to maximum when playing
-      await sound.replayAsync(); // Ensure it plays from the beginning each time
+      if (recordingStatus === "recording") {
+        console.log("Stopping Recording");
+        await recording.stopAndUnloadAsync();
+        const recordingUri = recording.getURI();
+        const fileName = `recording-${Date.now()}.caf`;
+
+        await FileSystem.makeDirectoryAsync(
+          FileSystem.documentDirectory + "recordings/",
+          { intermediates: true },
+        );
+        await FileSystem.moveAsync({
+          from: recordingUri,
+          to: FileSystem.documentDirectory + "recordings/" + `${fileName}`,
+        });
+
+        const playbackObject = new Audio.Sound();
+        await playbackObject.loadAsync({
+          uri: FileSystem.documentDirectory + "recordings/" + `${fileName}`,
+        });
+        await playbackObject.playAsync();
+
+        setRecording(null);
+        setRecordingStatus("stopped");
+        return FileSystem.documentDirectory + "recordings/" + `${fileName}`;
+      }
     } catch (error) {
-      console.error("Failed to play sound", error);
+      console.error("Failed to stop recording", error);
     }
   }
 
-  function clearRecordings() {
-    setRecordings([]);
+  async function handleRecordButtonPress() {
+    if (recording) {
+      const audioUri = await stopRecording();
+      if (audioUri) {
+        console.log("Saved audio file to", audioUri);
+      }
+    } else {
+      await startRecording();
+    }
   }
 
   return (
     <View style={styles.container}>
-      <Button
-        title={recording ? "Stop Recording" : "Start Recording\n\n\n"}
-        onPress={recording ? stopRecording : startRecording}
-      />
-      {getRecordingLines()}
-      <Button
-        title={recordings.length > 0 ? "\n\n\nClear Recordings" : ""}
-        onPress={clearRecordings}
-      />
+      <TouchableOpacity style={styles.button} onPress={handleRecordButtonPress}>
+        <FontAwesome
+          name={recording ? "stop-circle" : "circle"}
+          size={64}
+          color="white"
+        />
+      </TouchableOpacity>
+      <Text style={styles.recordingStatusText}>
+        {`Recording status: ${recordingStatus}`}
+      </Text>
+
+      {recordingStatus === "stopped" && (
+        <View style={{ marginTop: 58, marginBottom: 2 }}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Player")}
+            style={styles.continueButton}
+          >
+            <Text style={styles.continueButtonText}>Continue</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };
@@ -99,20 +130,32 @@ const AudioRecord = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
   },
-  row: {
-    flexDirection: "row",
+  button: {
     alignItems: "center",
     justifyContent: "center",
-    marginLeft: 10,
-    marginRight: 40,
+    width: 128,
+    height: 128,
+    borderRadius: 64,
+    backgroundColor: "red",
   },
-  fill: {
-    flex: 1,
-    margin: 15,
+  recordingStatusText: {
+    marginTop: 16,
+  },
+  continueButton: {
+    backgroundColor: "#3E8B9A",
+    alignItems: "center",
+    justifyContent: "center",
+    height: 48,
+    width: 100,
+    borderRadius: 8,
+  },
+  continueButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 
