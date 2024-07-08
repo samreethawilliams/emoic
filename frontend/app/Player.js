@@ -6,12 +6,11 @@ import {
   Button,
   ScrollView,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Footer from "./components/footer";
 import { useNavigation } from "@react-navigation/native";
 import Slider from "@react-native-community/slider";
-import { useEffect, useState } from "react";
 import { Audio } from "expo-av";
 
 const Player = () => {
@@ -21,6 +20,7 @@ const Player = () => {
 
   const [sound, setSound] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [playbackStatus, setPlaybackStatus] = useState(null);
 
   async function playPauseSound() {
     if (isPlaying) {
@@ -35,6 +35,8 @@ const Player = () => {
         console.log("Loading Sound");
         const { sound } = await Audio.Sound.createAsync(
           require("../assets/sounds/sample.mp3"),
+          {},
+          (status) => setPlaybackStatus(status),
         );
         setSound(sound);
         console.log("Playing Sound");
@@ -52,6 +54,35 @@ const Player = () => {
         }
       : undefined;
   }, [sound]);
+
+  const getSliderValue = () => {
+    if (playbackStatus && playbackStatus.durationMillis) {
+      return playbackStatus.positionMillis / playbackStatus.durationMillis;
+    }
+    return 0;
+  };
+
+  const getCurrentTime = () => {
+    if (playbackStatus) {
+      const minutes = Math.floor(playbackStatus.positionMillis / 60000);
+      const seconds = Math.floor(
+        (playbackStatus.positionMillis % 60000) / 1000,
+      );
+      return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+    }
+    return "0:00";
+  };
+
+  const getDuration = () => {
+    if (playbackStatus) {
+      const minutes = Math.floor(playbackStatus.durationMillis / 60000);
+      const seconds = Math.floor(
+        (playbackStatus.durationMillis % 60000) / 1000,
+      );
+      return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+    }
+    return "0:00";
+  };
 
   return (
     <View
@@ -82,10 +113,23 @@ const Player = () => {
         style={{ width: 400, height: 50, marginLeft: 20, marginRight: 20 }}
         minimumValue={0}
         maximumValue={1}
+        value={getSliderValue()}
         minimumTrackTintColor="#FFFFFF"
-        maximumTrackTintColor="#000000"
+        maximumTrackTintColor="#3E8B9A"
         disabled={true}
       />
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          width: 400,
+          marginLeft: 20,
+          marginRight: 20,
+        }}
+      >
+        <Text>{getCurrentTime()}</Text>
+        <Text>{getDuration()}</Text>
+      </View>
       <TouchableOpacity
         style={{
           backgroundColor: "#3E8B9A",
