@@ -1,4 +1,11 @@
-import { View, Text, Image, TouchableOpacity, Button } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  Button,
+  ScrollView,
+} from "react-native";
 import React from "react";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Footer from "./components/footer";
@@ -22,7 +29,7 @@ const Player = () => {
         borderRadius: 30,
       }}
     >
-      <Bg style={{ height: 1000, width: 10 }} />
+      <Bg style={{ height: 1000, width: 1000 }} />
       <Image
         source={{
           uri: "https://cdn.pixabay.com/photo/2017/03/05/21/55/emoticon-2120024_640.png",
@@ -34,20 +41,9 @@ const Player = () => {
           Name of the Audio
         </Text>
       </View>
-      <View style={{ marginBottom: 30 }}>
+      <View style={{ marginBottom: 20 }}>
         <Text>Artist</Text>
       </View>
-      <TouchableOpacity
-        style={{
-          backgroundColor: "#3E8B9A",
-          borderRadius: 100,
-          padding: 10,
-          marginBottom: 10,
-        }}
-        onPress={() => {}}
-      >
-        <Icon name="pause" size={20} color="#fff" />
-      </TouchableOpacity>
       <Slider
         style={{ width: 200, height: 40 }}
         minimumValue={0}
@@ -56,6 +52,17 @@ const Player = () => {
         maximumTrackTintColor="#000000"
         disabled={true}
       />
+      <TouchableOpacity
+        style={{
+          backgroundColor: "#3E8B9A",
+          borderRadius: 100,
+          padding: 20,
+          marginBottom: 10,
+        }}
+        onPress={() => {}}
+      >
+        <Icon name="pause" size={30} color="#fff" />
+      </TouchableOpacity>
       <View style={{ alignItems: "center" }}>
         <Button
           title="Go to Dashboard"
@@ -63,17 +70,23 @@ const Player = () => {
           color="#3E8B9A"
         />
       </View>
-      <Text
+      <ScrollView
         style={{
           marginTop: 30,
-          backgroundColor: "#3E8B9A",
+          backgroundColor: "white",
           borderRadius: 20,
-          fontSize: 14,
-          textAlign: "center",
+          padding: 10,
         }}
       >
-        {lyrics}
-      </Text>
+        <Text
+          style={{
+            fontSize: 14,
+            textAlign: "center",
+          }}
+        >
+          {lyrics}
+        </Text>
+      </ScrollView>
       <View style={{ alignItems: "center", marginTop: 120 }}>
         <Footer />
       </View>

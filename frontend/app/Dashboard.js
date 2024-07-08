@@ -8,10 +8,10 @@ import {
   Image,
 } from "react-native";
 import React from "react";
-import Player from "./Player";
 import { useNavigation } from "@react-navigation/native";
 import Footer from "./components/footer";
 import Icon from "react-native-vector-icons/FontAwesome";
+import Bg from "./svgs/Bg";
 
 const Dashboard = () => {
   const audioHistory = [
@@ -47,6 +47,7 @@ const Dashboard = () => {
         padding: 20,
       }}
     >
+      <Bg style={{ height: 1000, width: 1000 }} />
       <View
         style={{
           marginBottom: 20,
@@ -98,17 +99,6 @@ const Dashboard = () => {
             data={audioHistory}
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
-          />
-        </View>
-        <View
-          style={{
-            alignItems: "center",
-          }}
-        >
-          <Button
-            title="AudioPlayer"
-            onPress={() => navigation.navigate("Player")}
-            color="#3E8B9A"
           />
         </View>
       </View>
