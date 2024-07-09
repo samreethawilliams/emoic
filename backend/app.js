@@ -5,7 +5,6 @@ import { sync } from "cross-spawn";
 import ngrok from "@ngrok/ngrok";
 import pg from "pg";
 import argon2 from "argon2";
-import jwt from "jsonwebtoken";
 
 // database connection
 const { Client } = pg;
@@ -89,7 +88,7 @@ app.post("/sign-up", async (req, res) => {
 
     return res.send({
       status: true,
-      token: jwt.sign({ name, email }, "emoic"),
+      user: { name: name, email },
       message: "User has been registered successfully",
     });
   } catch (err) {
@@ -152,7 +151,7 @@ app.post("/login", async (req, res) => {
 
   return res.send({
     status: true,
-    token: jwt.sign({ name: user.name, email }, "emoic"),
+    user: { name: user.name, email },
   });
 });
 
@@ -161,7 +160,7 @@ app.listen(port, () => {
 });
 
 // ngrok
-if (process.env.USE_NGROK === true) {
+if (process.env.USE_NGROK === "true") {
   ngrok
     .connect({ addr: port, authtoken_from_env: true })
     .then((listener) =>
