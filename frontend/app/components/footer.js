@@ -1,18 +1,40 @@
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
+import { useNavigation } from "@react-navigation/native";
+import Dashboard from "../Dashboard";
+import AudioRecord from "../AudioRecord";
 
 const Footer = () => {
+  const navigation = useNavigation();
+
+  const handleDashboardPress = () => {
+    navigation.navigate("Dashboard");
+  };
+
+  const handleUploadPress = () => {
+    navigation.navigate("AudioRecord");
+  };
   return (
-    <View style={{ position: "absolute", alignItems: "center" }}>
-      <Text style={{ fontSize: 14, marginBottom: 10 }}>Enjoy the mood..</Text>
-      <View
-        style={{
-          width: 150,
-          height: 4,
-          backgroundColor: "grey",
-          borderRadius: 2,
-        }}
-      ></View>
+    <View
+      style={{
+        position: "absolute",
+        bottom: 0,
+        width: "100%",
+        flexDirection: "row",
+        justifyContent: "space-around",
+        alignItems: "center",
+        backgroundColor: "#f8f8f8",
+        padding: 10,
+        borderTopWidth: 1,
+        borderColor: "#ccc",
+      }}
+    >
+      <TouchableOpacity onPress={handleDashboardPress}>
+        <Text>Dashboard</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={handleUploadPress}>
+        <Text>+</Text>
+      </TouchableOpacity>
     </View>
   );
 };
