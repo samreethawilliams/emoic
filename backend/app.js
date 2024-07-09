@@ -1,7 +1,7 @@
-const express = require("express");
-const cors = require("cors");
-const multer = require("multer");
-const { sync } = require("cross-spawn");
+import express from "express";
+import cors from "cors";
+import multer from "multer";
+import { sync } from "cross-spawn";
 
 const storage = multer.diskStorage({
   filename: function (req, file, cb) {
@@ -47,11 +47,12 @@ app.post("/upload_files", upload.single("file"), async (req, res) => {
   } else {
     res.send({
       status: true,
+      convertedAudioFile: `${fileName}.wav`,
       message: "Sucessfully uploaded and converted the files",
     });
   }
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`Upload server listening at http://localhost:${port}`);
 });
