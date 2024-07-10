@@ -10,7 +10,6 @@ import {
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import Footer from "./components/footer";
-import Icon from "react-native-vector-icons/FontAwesome";
 
 const Dashboard = () => {
   const audioHistory = [
@@ -40,93 +39,64 @@ const Dashboard = () => {
   const navigation = useNavigation();
   return (
     <View
-      style={{
-        flex: 1,
-        alignItems: "center",
-        padding: 20,
-      }}
+      style={{ flex: 1, borderColor: "#3E8B9A", borderWidth: 10, padding: 10 }}
     >
       <View
         style={{
-          marginBottom: 20,
-          marginTop: 20,
+          flex: 1,
+          alignItems: "center",
+          padding: 20,
         }}
       >
-        <Image
-          source={{
-            uri: "https://c8.alamy.com/zooms/9/d4c59d90389444e3b1166312d2f7fa51/p9mywr.jpg",
-          }}
-          style={{
-            width: 100,
-            height: 100,
-            borderRadius: 100,
-            marginRight: 30,
-          }}
-        />
-        <Text style={{ fontSize: 24, fontWeight: "bold", marginTop: 10 }}>
-          Hi, Joel
-        </Text>
-        {/* <TouchableOpacity
-          style={{ backgroundColor: "#3E8B9A", padding: 6, borderRadius: 100 }}
-          onPress={() => {}}
-        >
-          <Icon name="plus" size={20} color="#fff" />
-        </TouchableOpacity> */}
-      </View>
-      <View
-        style={{
-          width: "100%",
-        }}
-      >
-        <Text
-          style={{
-            fontSize: 20,
-            fontWeight: "bold",
-            marginBottom: 20,
-          }}
-        >
-          Audio History
-        </Text>
         <View
           style={{
-            padding: 10,
             marginBottom: 20,
+            marginTop: 20,
+            alignContent: "center",
           }}
         >
-          <FlatList
-            data={audioHistory}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
+          <Image
+            source={{
+              uri: "https://c8.alamy.com/zooms/9/d4c59d90389444e3b1166312d2f7fa51/p9mywr.jpg",
+            }}
+            style={{
+              width: 100,
+              height: 100,
+              borderRadius: 100,
+              marginRight: 30,
+            }}
           />
+          <Text style={{ fontSize: 24, fontWeight: "bold", marginTop: 10 }}>
+            Hi, Joel
+          </Text>
         </View>
-      </View>
-
-      <View
-        style={{
-          alignItems: "center",
-        }}
-      >
-        <TouchableOpacity
+        <View
           style={{
-            marginTop: 10,
-            backgroundColor: "#3E8B9A",
-            padding: 10,
-            borderRadius: 50,
-            elevation: 5,
+            width: "100%",
           }}
-          onPress={() => {}}
         >
-          <Icon name="plus" size={20} color="#fff" />
-        </TouchableOpacity>
-      </View>
-      <View
-        style={{
-          alignItems: "center",
-          width: "100%",
-          position: "relative",
-          bottom: 0,
-        }}
-      >
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: "bold",
+              marginBottom: 20,
+            }}
+          >
+            Audio History
+          </Text>
+          <View
+            style={{
+              padding: 10,
+              marginBottom: 20,
+            }}
+          >
+            <FlatList
+              data={audioHistory}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id}
+            />
+          </View>
+        </View>
         <Footer />
       </View>
     </View>
