@@ -1,9 +1,6 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
-import Dashboard from "../Dashboard";
-import AudioRecord from "../AudioRecord";
-import Login from "../Login";
 import { Ionicons } from "@expo/vector-icons";
 
 const Footer = () => {
