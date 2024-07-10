@@ -1,44 +1,76 @@
-import { View, Text, Button } from "react-native";
-import Login from "./Login";
-import SignUp from "./SignUp";
-import EmoicLogo from "./svgs/EmoicLogo";
+import React from "react";
+import { View, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import Player from "./Player";
+import EmoicLogo from "./svgs/EmoicLogo";
+import Bg from "./svgs/Bg";
 
 const Home = () => {
   const navigation = useNavigation();
   return (
     <View
-      style={{
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        padding: 16,
-      }}
+      style={{ flex: 1, borderColor: "#3E8B9A", borderWidth: 2, padding: 2 }}
     >
-      <View style={{ marginBottom: 100, alignItems: "center" }}>
-        <EmoicLogo style={{ width: 120, height: 120 }} />
-      </View>
-      <Text
+      <Bg
         style={{
-          fontSize: 32,
-          fontWeight: "bold",
-          textAlign: "center",
-          marginBottom: 50,
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          width: "100%",
+          height: "100%",
+        }}
+      />
+      <View
+        style={{
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center",
+          padding: 10,
         }}
       >
-        Let the music reflect the emotions..
-      </Text>
-      <Button
-        title="Continue"
-        onPress={() => navigation.navigate("Login")}
-        color="#3E8B9A"
-      />
-      <Button
-        title="AudioPlayer"
-        onPress={() => navigation.navigate("Player")}
-        color="#3E8B9A"
-      />
+        <View style={{ marginBottom: 100, alignItems: "center" }}>
+          <EmoicLogo style={{ width: 300, height: 300 }} />
+        </View>
+        <Text
+          style={{
+            fontSize: 32,
+            fontWeight: "bold",
+            textAlign: "center",
+            marginBottom: 50,
+            marginRight: 20,
+            marginLeft: 20,
+          }}
+        >
+          Let the music reflect the emotions..
+        </Text>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Login")}
+          style={{
+            backgroundColor: "#3E8B9A",
+            alignItems: "center",
+            justifyContent: "center",
+            height: 48,
+            borderRadius: 8,
+          }}
+        >
+          <Text style={{ color: "#FFFFFF", fontSize: 18, padding: 5 }}>
+            Get Started
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Player")}
+          style={{
+            backgroundColor: "#3E8B9A",
+            alignItems: "center",
+            justifyContent: "center",
+            height: 48,
+            borderRadius: 8,
+          }}
+        >
+          <Text style={{ color: "#FFFFFF", fontSize: 18 }}>AudioPlayer</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
