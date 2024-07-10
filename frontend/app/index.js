@@ -12,7 +12,7 @@ const Home = () => {
     <View
       style={{ flex: 1, borderColor: "#3E8B9A", borderWidth: 8, padding: 5 }}
     >
-      <Bg />
+      {/* <Bg /> */}
       <View
         style={{
           flex: 1,
