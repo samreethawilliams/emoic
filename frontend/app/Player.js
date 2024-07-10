@@ -7,17 +7,17 @@ import {
   Button,
   ScrollView,
 } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
+import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Slider from "@react-native-community/slider";
 import { Audio } from "expo-av";
 import { LinearGradient } from "expo-linear-gradient";
-import Footer from "./components/footer";
+// import Footer from "./components/footer";
 
 const Player = () => {
   const navigation = useNavigation();
   const lyrics =
-    "Twinkle, twinkle, little star, How I wonder what you are! Up above the world so high, Like a diamond in the sky.";
+    "Twinkle, twinkle, little star,   How I wonder what you are! Up above the world so high, Like a diamond in the sky.";
 
   const [sound, setSound] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -94,28 +94,18 @@ const Player = () => {
         style={{
           flex: 1,
           alignItems: "center",
-          marginTop: 50,
-          marginBottom: 50,
-          borderRadius: 30,
           padding: 20,
         }}
       >
         <View
           style={{
-            backgroundColor: "white",
-            borderRadius: 30,
-            padding: 20,
             alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          <Image
-            source={{
-              uri: "https://cdn.pixabay.com/photo/2017/03/05/21/55/emoticon-2120024_640.png",
-            }}
-            style={{ width: 200, height: 200, borderRadius: 100 }}
-          />
+          <Text style={{ fontSize: 200 }}>😊</Text>
         </View>
-        <View style={{ marginTop: 30, marginBottom: 20 }}>
+        <View style={{ marginTop: 30, marginBottom: 10 }}>
           <Text style={{ fontSize: 20, fontWeight: "bold" }}>
             Name of the Audio
           </Text>
@@ -144,45 +134,74 @@ const Player = () => {
           <Text>{getCurrentTime()}</Text>
           <Text>{getDuration()}</Text>
         </View>
-        <TouchableOpacity
+        <View
           style={{
-            backgroundColor: "#3E8B9A",
-            borderRadius: 100,
-            padding: 20,
+            flexDirection: "row",
+            justifyContent: "center",
             marginBottom: 10,
           }}
-          onPress={playPauseSound}
         >
-          <Icon name={isPlaying ? "pause" : "play"} size={30} color="#fff" />
-        </TouchableOpacity>
-        <View style={{ alignItems: "center" }}>
-          <Button
-            title="Go to Dashboard"
-            onPress={() => navigation.navigate("Dashboard")}
-            color="#3E8B9A"
-          />
-        </View>
-        <ScrollView
-          style={{
-            marginTop: 30,
-            backgroundColor: "#F0F0F0",
-            borderRadius: 20,
-            padding: 20,
-            height: 300,
-          }}
-        >
-          <Text
+          <TouchableOpacity
             style={{
-              fontSize: 24,
-              textAlign: "center",
+              marginRight: 20,
+            }}
+            onPress={playPauseSound}
+          >
+            <View
+              style={{
+                width: 60,
+                height: 60,
+                borderRadius: 30,
+                backgroundColor: "white",
+                alignItems: "center",
+              }}
+            >
+              <MaterialIcons
+                name={isPlaying ? "pause-circle" : "play-circle"}
+                size={60}
+                color="#3E8B9A"
+              />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              marginBottom: 10,
+            }}
+            onPress={() => navigation.navigate("Dashboard")}
+          >
+            <View
+              style={{
+                width: 60,
+                height: 60,
+                borderRadius: 30,
+                backgroundColor: "white",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <MaterialIcons name="dashboard" size={50} color="#3E8B9A" />
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={{ marginTop: 30 }}>
+          <ScrollView
+            style={{
+              backgroundColor: "#F0F0F0",
+              borderRadius: 10,
+              padding: 10,
             }}
           >
-            {lyrics}
-          </Text>
-        </ScrollView>
-        <View style={{ alignItems: "center", marginTop: 120 }}>
-          <Footer />
+            <Text
+              style={{
+                fontSize: 20,
+                textAlign: "center",
+              }}
+            >
+              {lyrics}
+            </Text>
+          </ScrollView>
         </View>
+        {/* <Footer /> */}
       </View>
     </LinearGradient>
   );
