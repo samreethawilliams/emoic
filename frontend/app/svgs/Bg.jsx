@@ -11,12 +11,7 @@ import Svg, {
 
 const Bg = () => (
   <View style={StyleSheet.absoluteFillObject}>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="100%"
-      height="100%"
-      viewBox="0 0 1600 800"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 800">
       <rect fill="#3E8B9A" width="1600" height="800" />
       <g fillOpacity="1">
         <path
