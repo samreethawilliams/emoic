@@ -58,7 +58,7 @@ const AudioRecord = () => {
         console.log("Stopping Recording");
         await recording.stopAndUnloadAsync();
         const recordingUri = recording.getURI();
-        const fileName = `recording-${Date.now()}.m4a`;
+        const fileName = `recording-${Date.now()}.mp3`;
 
         await FileSystem.makeDirectoryAsync(
           FileSystem.documentDirectory + "recordings/",
