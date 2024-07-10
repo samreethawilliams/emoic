@@ -3,6 +3,8 @@ import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import Dashboard from "../Dashboard";
 import AudioRecord from "../AudioRecord";
+import Login from "../Login";
+import { Ionicons } from "@expo/vector-icons";
 
 const Footer = () => {
   const navigation = useNavigation();
@@ -13,6 +15,10 @@ const Footer = () => {
 
   const handleUploadPress = () => {
     navigation.navigate("AudioRecord");
+  };
+
+  const handleLogoutPress = () => {
+    navigation.navigate("Login");
   };
   return (
     <View
@@ -30,10 +36,13 @@ const Footer = () => {
       }}
     >
       <TouchableOpacity onPress={handleDashboardPress}>
-        <Text>Dashboard</Text>
+        <Ionicons name="home" size={24} color="3E8B9A" />
       </TouchableOpacity>
       <TouchableOpacity onPress={handleUploadPress}>
-        <Text>+</Text>
+        <Ionicons name="add-circle" size={24} color="3E8B9A" />
+      </TouchableOpacity>
+      <TouchableOpacity onPress={handleLogoutPress}>
+        <Ionicons name="log-out" size={24} color="3E8B9A" />
       </TouchableOpacity>
     </View>
   );

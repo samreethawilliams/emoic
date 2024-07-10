@@ -7,7 +7,7 @@ import {
   Button,
   ScrollView,
 } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
+import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Slider from "@react-native-community/slider";
 import { Audio } from "expo-av";
@@ -17,7 +17,7 @@ import Footer from "./components/footer";
 const Player = () => {
   const navigation = useNavigation();
   const lyrics =
-    "Twinkle, twinkle, little star, How I wonder what you are! Up above the world so high, Like a diamond in the sky.";
+    "Twinkle, twinkle, little star,   How I wonder what you are! Up above the world so high, Like a diamond in the sky.";
 
   const [sound, setSound] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -103,8 +103,8 @@ const Player = () => {
         <View
           style={{
             backgroundColor: "white",
-            borderRadius: 30,
-            padding: 20,
+            borderRadius: 100,
+            padding: 5,
             alignItems: "center",
           }}
         >
@@ -115,7 +115,7 @@ const Player = () => {
             style={{ width: 200, height: 200, borderRadius: 100 }}
           />
         </View>
-        <View style={{ marginTop: 30, marginBottom: 20 }}>
+        <View style={{ marginTop: 30, marginBottom: 10 }}>
           <Text style={{ fontSize: 20, fontWeight: "bold" }}>
             Name of the Audio
           </Text>
@@ -144,23 +144,33 @@ const Player = () => {
           <Text>{getCurrentTime()}</Text>
           <Text>{getDuration()}</Text>
         </View>
-        <TouchableOpacity
+        <View
           style={{
-            backgroundColor: "#3E8B9A",
-            borderRadius: 100,
-            padding: 20,
+            flexDirection: "row",
+            justifyContent: "center",
             marginBottom: 10,
           }}
-          onPress={playPauseSound}
         >
-          <Icon name={isPlaying ? "pause" : "play"} size={30} color="#fff" />
-        </TouchableOpacity>
-        <View style={{ alignItems: "center" }}>
-          <Button
-            title="Go to Dashboard"
+          <TouchableOpacity
+            style={{
+              marginRight: 20,
+            }}
+            onPress={playPauseSound}
+          >
+            <MaterialIcons
+              name={isPlaying ? "pause-circle" : "play-circle"}
+              size={60}
+              color="#3E8B9A"
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              marginBottom: 10,
+            }}
             onPress={() => navigation.navigate("Dashboard")}
-            color="#3E8B9A"
-          />
+          >
+            <MaterialIcons name="dashboard" size={60} color="#3E8B9A" />
+          </TouchableOpacity>
         </View>
         <ScrollView
           style={{
@@ -173,7 +183,7 @@ const Player = () => {
         >
           <Text
             style={{
-              fontSize: 24,
+              fontSize: 20,
               textAlign: "center",
             }}
           >
