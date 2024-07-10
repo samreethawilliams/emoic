@@ -2,25 +2,23 @@ import * as React from "react";
 import { View, StyleSheet } from "react-native";
 import Svg, { Circle, LinearGradient, Stop, G } from "react-native-svg";
 
-const Bg = () => (
-  <View style={StyleSheet.absoluteFillObject}>
-    <Svg height="100%" width="100%">
-      <LinearGradient id="grad" x1="0" y1="0" x2="100%" y2="0">
-        <Stop offset="0%" stopColor="#4ca1af" />
-        <Stop offset="100%" stopColor="#c4e0e5" />
-      </LinearGradient>
-      <G>
-        <Circle cx="50%" cy="50%" r="60%" fill="url(#grad)" />
-        <G opacity="0.5">
-          <Circle cx="50%" cy="50%" r="25%" fill="url(#grad)" />
-          <Circle cx="50%" cy="50%" r="20%" fill="url(#grad)" />
-          <Circle cx="50%" cy="50%" r="15%" fill="url(#grad)" />
-          <Circle cx="50%" cy="50%" r="12%" fill="url(#grad)" />
-          <Circle cx="50%" cy="50%" r="10%" fill="url(#grad)" />
-        </G>
-      </G>
-    </Svg>
-  </View>
+const Bg = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="100%"
+    height="100%"
+    viewBox="0 0 800 800"
+  >
+    <rect fill="#C4E0E5" width="800" height="800" />
+    <g fill-opacity="0.29">
+      <circle fill="#C4E0E5" cx="400" cy="400" r="600" />
+      <circle fill="#aed3da" cx="400" cy="400" r="500" />
+      <circle fill="#97c7cf" cx="400" cy="400" r="400" />
+      <circle fill="#80bac4" cx="400" cy="400" r="300" />
+      <circle fill="#67adba" cx="400" cy="400" r="200" />
+      <circle fill="#4CA1AF" cx="400" cy="400" r="100" />
+    </g>
+  </svg>
 );
 
 export default Bg;
