@@ -4,7 +4,7 @@ import Svg, { Circle, LinearGradient, Stop, G } from "react-native-svg";
 
 const Bg = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" {...props} viewBox="0 0 800 800">
-    <rect fill="#C4E0E5" width="800" height="800" />
+    <rect fill="#C4E0E5" />
     <g fillOpacity="0.29">
       <circle fill="#C4E0E5" cx="400" cy="400" r="600" />
       <circle fill="#aed3da" cx="400" cy="400" r="500" />

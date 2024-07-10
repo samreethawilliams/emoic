@@ -18,7 +18,7 @@ const Home = () => {
           flex: 1,
           alignItems: "center",
           justifyContent: "center",
-          padding: 16,
+          padding: 10,
         }}
       >
         <View style={{ marginBottom: 100, alignItems: "center" }}>
