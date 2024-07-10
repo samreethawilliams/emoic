@@ -1,4 +1,4 @@
-import { View, Text, Button, ImageBackground } from "react-native";
+import { View, Text, Button, StyleSheet } from "react-native";
 import Login from "./Login";
 import SignUp from "./SignUp";
 import EmoicLogo from "./svgs/EmoicLogo";
@@ -10,7 +10,7 @@ const Home = () => {
   const navigation = useNavigation();
   return (
     <View style={{ flex: 1 }}>
-      <Bg />
+      <Bg style={StyleSheet.absoluteFillObject} />
       <View
         style={{
           flex: 1,

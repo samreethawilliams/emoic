@@ -94,9 +94,6 @@ const Player = () => {
         style={{
           flex: 1,
           alignItems: "center",
-          marginTop: 50,
-          marginBottom: 50,
-          borderRadius: 30,
           padding: 20,
         }}
       >
@@ -193,27 +190,25 @@ const Player = () => {
             </View>
           </TouchableOpacity>
         </View>
-        <ScrollView
-          style={{
-            marginTop: 30,
-            backgroundColor: "#F0F0F0",
-            borderRadius: 20,
-            padding: 20,
-            height: 300,
-          }}
-        >
-          <Text
+        <View style={{ marginTop: 30 }}>
+          <ScrollView
             style={{
-              fontSize: 20,
-              textAlign: "center",
+              backgroundColor: "#F0F0F0",
+              borderRadius: 10,
+              padding: 10,
             }}
           >
-            {lyrics}
-          </Text>
-        </ScrollView>
-        <View style={{ alignItems: "center", marginTop: 120 }}>
-          <Footer />
+            <Text
+              style={{
+                fontSize: 20,
+                textAlign: "center",
+              }}
+            >
+              {lyrics}
+            </Text>
+          </ScrollView>
         </View>
+        <Footer />
       </View>
     </LinearGradient>
   );
