@@ -1,28 +1,24 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import React, { useState, useEffect } from "react";
+import { View, Text, TouchableOpacity, Button, StyleSheet } from "react-native";
 import { Audio } from "expo-av";
 import * as FileSystem from "expo-file-system";
 import { FontAwesome } from "@expo/vector-icons";
-import Player from "./Player";
 import { useNavigation } from "@react-navigation/native";
+import Footer from "./components/footer";
 
 const AudioRecord = () => {
   const [recording, setRecording] = useState(null);
   const [recordingStatus, setRecordingStatus] = useState("idle");
   const [audioPermission, setAudioPermission] = useState(null);
+  const [recordedAudio, setRecordedAudio] = useState(null);
 
   const navigation = useNavigation();
 
   useEffect(() => {
     async function getPermission() {
-      await Audio.requestPermissionsAsync()
-        .then((permission) => {
-          console.log("Permission Granted: " + permission.granted);
-          setAudioPermission(permission.granted);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      const permission = await Audio.requestPermissionsAsync();
+      console.log("Permission Granted: " + permission.granted);
+      setAudioPermission(permission.granted);
     }
 
     getPermission();
@@ -69,32 +65,41 @@ const AudioRecord = () => {
           FileSystem.documentDirectory + "recordings/",
           { intermediates: true },
         );
+        const fileUri = FileSystem.documentDirectory + "recordings/" + fileName;
+
+        console.log("Saved audio file to", fileUri);
         await FileSystem.moveAsync({
           from: recordingUri,
-          to: FileSystem.documentDirectory + "recordings/" + `${fileName}`,
+          to: fileUri,
         });
 
-        const playbackObject = new Audio.Sound();
-        await playbackObject.loadAsync({
-          uri: FileSystem.documentDirectory + "recordings/" + `${fileName}`,
+        const { sound } = await Audio.Sound.createAsync({ uri: fileUri });
+
+        setRecordedAudio({
+          sound,
+          duration: getDurationFormatted(
+            (await sound.getStatusAsync()).durationMillis,
+          ),
+          file: fileUri,
         });
-        await playbackObject.playAsync();
 
         setRecording(null);
         setRecordingStatus("stopped");
-        return FileSystem.documentDirectory + "recordings/" + `${fileName}`;
       }
     } catch (error) {
       console.error("Failed to stop recording", error);
     }
   }
 
+  function getDurationFormatted(milliseconds) {
+    const minutes = Math.floor(milliseconds / 1000 / 60);
+    const seconds = Math.round((milliseconds / 1000) % 60);
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  }
+
   async function handleRecordButtonPress() {
     if (recording) {
-      const audioUri = await stopRecording();
-      if (audioUri) {
-        console.log("Saved audio file to", audioUri);
-      }
+      await stopRecording();
     } else {
       await startRecording();
     }
@@ -113,16 +118,27 @@ const AudioRecord = () => {
         {`Recording status: ${recordingStatus}`}
       </Text>
 
+      {recordedAudio && (
+        <View style={styles.row}>
+          <Text style={styles.fill}>Recording | {recordedAudio.duration}</Text>
+          <Button
+            onPress={() => recordedAudio.sound.replayAsync()}
+            title="Play"
+          />
+        </View>
+      )}
+
       {recordingStatus === "stopped" && (
-        <View style={{ marginTop: 58, marginBottom: 2 }}>
+        <View style={{ marginTop: 20 }}>
           <TouchableOpacity
             onPress={() => navigation.navigate("Player")}
             style={styles.continueButton}
           >
-            <Text style={styles.continueButtonText}>Continue</Text>
+            <Text style={styles.continueButtonText}>Analyze</Text>
           </TouchableOpacity>
         </View>
       )}
+      <Footer />
     </View>
   );
 };
@@ -132,6 +148,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    borderColor: "#3E8B9A",
+    borderWidth: 2,
+    padding: 2,
   },
   button: {
     alignItems: "center",
@@ -144,12 +163,23 @@ const styles = StyleSheet.create({
   recordingStatusText: {
     marginTop: 16,
   },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: 10,
+    marginRight: 40,
+  },
+  fill: {
+    flex: 1,
+    margin: 15,
+  },
   continueButton: {
     backgroundColor: "#3E8B9A",
     alignItems: "center",
     justifyContent: "center",
     height: 48,
-    width: 100,
+    width: 150,
     borderRadius: 8,
   },
   continueButtonText: {
