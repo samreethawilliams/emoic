@@ -1,8 +1,7 @@
-import { View, Text, FlatList, TouchableOpacity, Image } from "react-native";
+import { View, Text, FlatList, Image } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import Footer from "./components/footer";
-import Icon from "react-native-vector-icons/FontAwesome";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Dashboard = () => {

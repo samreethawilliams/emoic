@@ -87,13 +87,13 @@ const Login = () => {
   };
 
   return (
-<RootSiblingParent>
-    <SafeAreaView
-      style={{ flex: 1, borderColor: "#3E8B9A", borderWidth: 2, padding: 2 }}
-    >
-      <View style={{ flex: 1, marginHorizontal: 22 }}>
-        <View style={{ marginBottom: 100, alignItems: "center" }}>
-          {/* <Image
+    <RootSiblingParent>
+      <SafeAreaView
+        style={{ flex: 1, borderColor: "#3E8B9A", borderWidth: 2, padding: 2 }}
+      >
+        <View style={{ flex: 1, marginHorizontal: 22 }}>
+          <View style={{ marginBottom: 100, alignItems: "center" }}>
+            {/* <Image
             source={require("./assets/images/background.png")}
             style={{ width: 282, height: 280, marginBottom: 16 }}
           /> */}

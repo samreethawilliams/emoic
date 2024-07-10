@@ -107,12 +107,12 @@ const SignUp = () => {
 
   return (
     <RootSiblingParent>
-    <SafeAreaView
-      style={{ flex: 1, borderColor: "#3E8B9A", borderWidth: 2, padding: 2 }}
-    >
-      <View style={{ flex: 1, marginHorizontal: 22 }}>
-        <View style={{ marginBottom: 20, alignItems: "center" }}>
-          {/* <Image
+      <SafeAreaView
+        style={{ flex: 1, borderColor: "#3E8B9A", borderWidth: 2, padding: 2 }}
+      >
+        <View style={{ flex: 1, marginHorizontal: 22 }}>
+          <View style={{ marginBottom: 20, alignItems: "center" }}>
+            {/* <Image
             source={require("./emonic_logo.png")}
             style={{ width: 182, height: 180, marginBottom: 5 }}
           /> */}
