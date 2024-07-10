@@ -12,7 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import Slider from "@react-native-community/slider";
 import { Audio } from "expo-av";
 import { LinearGradient } from "expo-linear-gradient";
-import Footer from "./components/footer";
+// import Footer from "./components/footer";
 
 const Player = () => {
   const navigation = useNavigation();
@@ -99,18 +99,11 @@ const Player = () => {
       >
         <View
           style={{
-            backgroundColor: "white",
-            borderRadius: 100,
-            padding: 2,
             alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          <Image
-            source={{
-              uri: "https://cdn.pixabay.com/photo/2017/03/05/21/55/emoticon-2120024_640.png",
-            }}
-            style={{ width: 200, height: 200 }}
-          />
+          <Text style={{ fontSize: 200 }}>😊</Text>
         </View>
         <View style={{ marginTop: 30, marginBottom: 10 }}>
           <Text style={{ fontSize: 20, fontWeight: "bold" }}>
@@ -208,7 +201,7 @@ const Player = () => {
             </Text>
           </ScrollView>
         </View>
-        <Footer />
+        {/* <Footer /> */}
       </View>
     </LinearGradient>
   );

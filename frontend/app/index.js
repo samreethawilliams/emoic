@@ -1,4 +1,4 @@
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, Text, Button, TouchableOpacity } from "react-native";
 import Login from "./Login";
 import SignUp from "./SignUp";
 import EmoicLogo from "./svgs/EmoicLogo";
@@ -9,8 +9,10 @@ import Player from "./Player";
 const Home = () => {
   const navigation = useNavigation();
   return (
-    <View style={{ flex: 1 }}>
-      <Bg style={StyleSheet.absoluteFillObject} />
+    <View
+      style={{ flex: 1, borderColor: "#3E8B9A", borderWidth: 8, padding: 5 }}
+    >
+      <Bg />
       <View
         style={{
           flex: 1,
@@ -20,7 +22,7 @@ const Home = () => {
         }}
       >
         <View style={{ marginBottom: 100, alignItems: "center" }}>
-          <EmoicLogo style={{ width: 120, height: 120 }} />
+          <EmoicLogo style={{ width: 200, height: 200 }} />
         </View>
         <Text
           style={{
@@ -32,11 +34,22 @@ const Home = () => {
         >
           Let the music reflect the emotions..
         </Text>
-        <Button
-          title="Continue"
-          onPress={() => navigation.navigate("Login")}
-          color="#3E8B9A"
-        />
+        <TouchableOpacity
+          onPress={() => navigation.navigate("")}
+          style={{
+            backgroundColor: "#3E8B9A",
+            alignItems: "center",
+            justifyContent: "center",
+            height: 48,
+            borderRadius: 8,
+          }}
+        >
+          <Button
+            title="Get Started"
+            onPress={() => navigation.navigate("Login")}
+            color="#3E8B9A"
+          />
+        </TouchableOpacity>
         <Button
           title="AudioPlayer"
           onPress={() => navigation.navigate("Player")}
