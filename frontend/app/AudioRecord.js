@@ -4,6 +4,7 @@ import { Audio } from "expo-av";
 import * as FileSystem from "expo-file-system";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import Footer from "./components/footer";
 
 const AudioRecord = () => {
   const [recording, setRecording] = useState(null);
@@ -137,6 +138,7 @@ const AudioRecord = () => {
           </TouchableOpacity>
         </View>
       )}
+      <Footer />
     </View>
   );
 };
@@ -146,6 +148,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    borderColor: "#3E8B9A",
+    borderWidth: 2,
+    padding: 2,
   },
   button: {
     alignItems: "center",

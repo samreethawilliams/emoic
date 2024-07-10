@@ -22,7 +22,9 @@ const SignUp = () => {
   const navigation = useNavigation();
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#f8f8ff" }}>
+    <SafeAreaView
+      style={{ flex: 1, borderColor: "#3E8B9A", borderWidth: 2, padding: 2 }}
+    >
       <View style={{ flex: 1, marginHorizontal: 22 }}>
         <View style={{ marginBottom: 20, alignItems: "center" }}>
           {/* <Image
