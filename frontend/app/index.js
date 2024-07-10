@@ -1,18 +1,26 @@
-import { View, Text, Button, TouchableOpacity } from "react-native";
-import Login from "./Login";
-import SignUp from "./SignUp";
+import React from "react";
+import { View, Text, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import EmoicLogo from "./svgs/EmoicLogo";
 import Bg from "./svgs/Bg";
-import { useNavigation } from "@react-navigation/native";
-import Player from "./Player";
 
 const Home = () => {
   const navigation = useNavigation();
   return (
     <View
-      style={{ flex: 1, borderColor: "#3E8B9A", borderWidth: 5, padding: 5 }}
+      style={{ flex: 1, borderColor: "#3E8B9A", borderWidth: 2, padding: 2 }}
     >
-      {/* <Bg /> */}
+      <Bg
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          width: "100%",
+          height: "100%",
+        }}
+      />
       <View
         style={{
           flex: 1,
@@ -22,7 +30,7 @@ const Home = () => {
         }}
       >
         <View style={{ marginBottom: 100, alignItems: "center" }}>
-          <EmoicLogo style={{ width: 200, height: 200 }} />
+          <EmoicLogo style={{ width: 300, height: 300 }} />
         </View>
         <Text
           style={{
@@ -30,12 +38,14 @@ const Home = () => {
             fontWeight: "bold",
             textAlign: "center",
             marginBottom: 50,
+            marginRight: 20,
+            marginLeft: 20,
           }}
         >
           Let the music reflect the emotions..
         </Text>
         <TouchableOpacity
-          onPress={() => navigation.navigate("")}
+          onPress={() => navigation.navigate("Login")}
           style={{
             backgroundColor: "#3E8B9A",
             alignItems: "center",
@@ -44,17 +54,22 @@ const Home = () => {
             borderRadius: 8,
           }}
         >
-          <Button
-            title="Get Started"
-            onPress={() => navigation.navigate("Login")}
-            color="#3E8B9A"
-          />
+          <Text style={{ color: "#FFFFFF", fontSize: 18, padding: 5 }}>
+            Get Started
+          </Text>
         </TouchableOpacity>
-        <Button
-          title="AudioPlayer"
+        <TouchableOpacity
           onPress={() => navigation.navigate("Player")}
-          color="#3E8B9A"
-        />
+          style={{
+            backgroundColor: "#3E8B9A",
+            alignItems: "center",
+            justifyContent: "center",
+            height: 48,
+            borderRadius: 8,
+          }}
+        >
+          <Text style={{ color: "#FFFFFF", fontSize: 18 }}>AudioPlayer</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

@@ -87,7 +87,7 @@ const Player = () => {
 
   return (
     <LinearGradient
-      colors={["#3E8B9A", "#F0F0F0"]}
+      colors={["#A3CFD4", "#FFFFFF"]}
       style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
     >
       <View
@@ -106,7 +106,7 @@ const Player = () => {
           <Text style={{ fontSize: 200 }}>😊</Text>
         </View>
         <View style={{ marginTop: 30, marginBottom: 10 }}>
-          <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+          <Text style={{ fontSize: 24, fontWeight: "bold" }}>
             Name of the Audio
           </Text>
         </View>
@@ -186,7 +186,7 @@ const Player = () => {
         <View style={{ marginTop: 30 }}>
           <ScrollView
             style={{
-              backgroundColor: "#F0F0F0",
+              backgroundColor: "#FFFFFF",
               borderRadius: 10,
               padding: 10,
             }}
