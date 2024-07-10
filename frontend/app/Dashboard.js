@@ -39,7 +39,7 @@ const Dashboard = () => {
   const navigation = useNavigation();
   return (
     <View
-      style={{ flex: 1, borderColor: "#3E8B9A", borderWidth: 10, padding: 10 }}
+      style={{ flex: 1, borderColor: "#3E8B9A", borderWidth: 8, padding: 5 }}
     >
       <View
         style={{

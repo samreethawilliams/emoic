@@ -86,140 +86,136 @@ const Player = () => {
   };
 
   return (
-    <View
-      style={{ flex: 1, borderColor: "#3E8B9A", borderWidth: 10, padding: 10 }}
+    <LinearGradient
+      colors={["#3E8B9A", "#F0F0F0"]}
+      style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
     >
-      <LinearGradient
-        colors={["#3E8B9A", "#F0F0F0"]}
-        style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+      <View
+        style={{
+          flex: 1,
+          alignItems: "center",
+          marginTop: 50,
+          marginBottom: 50,
+          borderRadius: 30,
+          padding: 20,
+        }}
       >
         <View
           style={{
-            flex: 1,
+            backgroundColor: "white",
+            borderRadius: 100,
+            padding: 2,
             alignItems: "center",
-            marginTop: 50,
-            marginBottom: 50,
-            borderRadius: 30,
-            padding: 20,
           }}
         >
-          <View
-            style={{
-              backgroundColor: "white",
-              borderRadius: 100,
-              padding: 2,
-              alignItems: "center",
+          <Image
+            source={{
+              uri: "https://cdn.pixabay.com/photo/2017/03/05/21/55/emoticon-2120024_640.png",
             }}
-          >
-            <Image
-              source={{
-                uri: "https://cdn.pixabay.com/photo/2017/03/05/21/55/emoticon-2120024_640.png",
-              }}
-              style={{ width: 200, height: 200 }}
-            />
-          </View>
-          <View style={{ marginTop: 30, marginBottom: 10 }}>
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-              Name of the Audio
-            </Text>
-          </View>
-          <View style={{ marginBottom: 20 }}>
-            <Text>Artist</Text>
-          </View>
-          <Slider
-            style={{ width: 300, height: 50, marginLeft: 20, marginRight: 20 }}
-            minimumValue={0}
-            maximumValue={1}
-            value={getSliderValue()}
-            minimumTrackTintColor="#FFFFFF"
-            maximumTrackTintColor="#3E8B9A"
-            disabled={true}
+            style={{ width: 200, height: 200 }}
           />
-          <View
+        </View>
+        <View style={{ marginTop: 30, marginBottom: 10 }}>
+          <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+            Name of the Audio
+          </Text>
+        </View>
+        <View style={{ marginBottom: 20 }}>
+          <Text>Artist</Text>
+        </View>
+        <Slider
+          style={{ width: 300, height: 50, marginLeft: 20, marginRight: 20 }}
+          minimumValue={0}
+          maximumValue={1}
+          value={getSliderValue()}
+          minimumTrackTintColor="#FFFFFF"
+          maximumTrackTintColor="#3E8B9A"
+          disabled={true}
+        />
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            width: 300,
+            marginLeft: 20,
+            marginRight: 20,
+          }}
+        >
+          <Text>{getCurrentTime()}</Text>
+          <Text>{getDuration()}</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            marginBottom: 10,
+          }}
+        >
+          <TouchableOpacity
             style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              width: 300,
-              marginLeft: 20,
               marginRight: 20,
             }}
+            onPress={playPauseSound}
           >
-            <Text>{getCurrentTime()}</Text>
-            <Text>{getDuration()}</Text>
-          </View>
-          <View
+            <View
+              style={{
+                width: 60,
+                height: 60,
+                borderRadius: 30,
+                backgroundColor: "white",
+                alignItems: "center",
+              }}
+            >
+              <MaterialIcons
+                name={isPlaying ? "pause-circle" : "play-circle"}
+                size={60}
+                color="#3E8B9A"
+              />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
             style={{
-              flexDirection: "row",
-              justifyContent: "center",
               marginBottom: 10,
             }}
+            onPress={() => navigation.navigate("Dashboard")}
           >
-            <TouchableOpacity
+            <View
               style={{
-                marginRight: 20,
+                width: 60,
+                height: 60,
+                borderRadius: 30,
+                backgroundColor: "white",
+                justifyContent: "center",
+                alignItems: "center",
               }}
-              onPress={playPauseSound}
             >
-              <View
-                style={{
-                  width: 60,
-                  height: 60,
-                  borderRadius: 30,
-                  backgroundColor: "white",
-                  alignItems: "center",
-                }}
-              >
-                <MaterialIcons
-                  name={isPlaying ? "pause-circle" : "play-circle"}
-                  size={60}
-                  color="#3E8B9A"
-                />
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                marginBottom: 10,
-              }}
-              onPress={() => navigation.navigate("Dashboard")}
-            >
-              <View
-                style={{
-                  width: 60,
-                  height: 60,
-                  borderRadius: 30,
-                  backgroundColor: "white",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <MaterialIcons name="dashboard" size={50} color="#3E8B9A" />
-              </View>
-            </TouchableOpacity>
-          </View>
-          <ScrollView
+              <MaterialIcons name="dashboard" size={50} color="#3E8B9A" />
+            </View>
+          </TouchableOpacity>
+        </View>
+        <ScrollView
+          style={{
+            marginTop: 30,
+            backgroundColor: "#F0F0F0",
+            borderRadius: 20,
+            padding: 20,
+            height: 300,
+          }}
+        >
+          <Text
             style={{
-              marginTop: 30,
-              backgroundColor: "#F0F0F0",
-              borderRadius: 20,
-              padding: 20,
-              height: 300,
+              fontSize: 20,
+              textAlign: "center",
             }}
           >
-            <Text
-              style={{
-                fontSize: 20,
-                textAlign: "center",
-              }}
-            >
-              {lyrics}
-            </Text>
-          </ScrollView>
-          <View style={{ alignItems: "center", marginTop: 120 }}>
-            <Footer />
-          </View>
+            {lyrics}
+          </Text>
+        </ScrollView>
+        <View style={{ alignItems: "center", marginTop: 120 }}>
+          <Footer />
         </View>
-      </LinearGradient>
-    </View>
+      </View>
+    </LinearGradient>
   );
 };
 
