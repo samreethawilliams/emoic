@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, Button, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Button,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
 import { Audio } from "expo-av";
 import * as FileSystem from "expo-file-system";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Footer from "./components/footer";
+import { UPLOAD_SERVER } from "./utils/constants";
 
 const AudioRecord = () => {
   const [recording, setRecording] = useState(null);
   const [recordingStatus, setRecordingStatus] = useState("idle");
   const [audioPermission, setAudioPermission] = useState(null);
   const [recordedAudio, setRecordedAudio] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const navigation = useNavigation();
 
@@ -57,6 +66,10 @@ const AudioRecord = () => {
     try {
       if (recordingStatus === "recording") {
         console.log("Stopping Recording");
+        await Audio.setAudioModeAsync({
+          allowsRecordingIOS: false,
+          playsInSilentModeIOS: true,
+        });
         await recording.stopAndUnloadAsync();
         const recordingUri = recording.getURI();
         const fileName = `recording-${Date.now()}.mp3`;
@@ -81,6 +94,7 @@ const AudioRecord = () => {
             (await sound.getStatusAsync()).durationMillis,
           ),
           file: fileUri,
+          fileName,
         });
 
         setRecording(null);
@@ -102,6 +116,34 @@ const AudioRecord = () => {
       await stopRecording();
     } else {
       await startRecording();
+    }
+  }
+
+  async function uploadToServer() {
+    console.log("fileUri in uploadToServer", recordedAudio);
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", {
+        uri: recordedAudio.file,
+        type: "audio/mp3",
+        name: recordedAudio.fileName,
+      });
+
+      const fetchCall = await fetch(`${UPLOAD_SERVER}/upload-audio`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "multipart/form-data",
+        },
+        body: formData,
+      });
+      const res = await fetchCall.json();
+      console.log("response from /upload-audio: ", res);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -130,12 +172,16 @@ const AudioRecord = () => {
 
       {recordingStatus === "stopped" && (
         <View style={{ marginTop: 20 }}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Player")}
-            style={styles.continueButton}
-          >
-            <Text style={styles.continueButtonText}>Analyze</Text>
-          </TouchableOpacity>
+          {loading ? (
+            <ActivityIndicator size="small" color="#3E8B9A" />
+          ) : (
+            <TouchableOpacity
+              onPress={() => uploadToServer()}
+              style={styles.continueButton}
+            >
+              <Text style={styles.continueButtonText}>Analyze</Text>
+            </TouchableOpacity>
+          )}
         </View>
       )}
       <Footer />
@@ -179,7 +225,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: 48,
-    width: 150,
+    width: 350,
     borderRadius: 8,
   },
   continueButtonText: {

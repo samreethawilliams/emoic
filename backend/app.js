@@ -35,7 +35,9 @@ app.get("/", (req, res) => {
   res.json("Emoic says hello!!");
 });
 
-app.post("/upload_files", upload.single("file"), async (req, res) => {
+app.post("/upload-audio", upload.single("file"), async (req, res) => {
+  console.log(req.body);
+  console.log(req.file);
   const originalFileName = req.file.filename;
   process.chdir("/Users/joelmathew/WebProjects/emoic/backend/uploads");
   const [fileName] = originalFileName.split(".mp3");
