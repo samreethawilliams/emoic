@@ -140,6 +140,30 @@ const AudioRecord = () => {
       });
       const res = await fetchCall.json();
       console.log("response from /upload-audio: ", res);
+
+      if (res.status === true && res.message === "File uploaded successfully") {
+        convertAudio(res.fileName);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function convertAudio(fileName) {
+    setLoading(true);
+    try {
+      const fetchCall = await fetch(`${UPLOAD_SERVER}/convert-audio`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ fileName }),
+      });
+      const res = await fetchCall.json();
+      console.log("response from /convert-audio: ", res);
     } catch (error) {
       console.error(error);
     } finally {

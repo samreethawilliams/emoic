@@ -5,6 +5,7 @@ import { sync } from "cross-spawn";
 import ngrok from "@ngrok/ngrok";
 import pg from "pg";
 import argon2 from "argon2";
+import fs from "fs";
 
 // database connection
 const { Client } = pg;
@@ -15,15 +16,15 @@ await client.connect();
 
 const storage = multer.diskStorage({
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + "-" + uniqueSuffix + ".mp3");
+    cb(null, file.originalname);
   },
+
   destination: function (req, file, cb) {
     cb(null, "./uploads");
   },
 });
 
-const upload = multer({ storage });
+const upload = multer({ storage: storage });
 
 const app = express();
 const port = 8080;
@@ -38,7 +39,21 @@ app.get("/", (req, res) => {
 app.post("/upload-audio", upload.single("file"), async (req, res) => {
   console.log(req.body);
   console.log(req.file);
-  const originalFileName = req.file.filename;
+  if (fs.existsSync(`./uploads/${req.file.filename}`)) {
+    return res.send({
+      status: true,
+      fileName: req.file.filename,
+      message: "File uploaded successfully",
+    });
+  }
+  return res.send({
+    status: false,
+  });
+});
+
+app.post("/convert-audio", async (req, res) => {
+  console.log(req.body);
+  const originalFileName = req.body.fileName;
   process.chdir("/Users/joelmathew/WebProjects/emoic/backend/uploads");
   const [fileName] = originalFileName.split(".mp3");
 
@@ -53,11 +68,13 @@ app.post("/upload-audio", upload.single("file"), async (req, res) => {
   const error = ffmpegprocess.error;
 
   if (error) {
+    process.chdir("/Users/joelmathew/WebProjects/emoic/backend");
     res.send({
       status: false,
       message: "Some error occurred",
     });
   } else {
+    process.chdir("/Users/joelmathew/WebProjects/emoic/backend");
     res.send({
       status: true,
       convertedAudioFile: `${fileName}.wav`,
