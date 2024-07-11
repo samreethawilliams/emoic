@@ -15,15 +15,15 @@ await client.connect();
 
 const storage = multer.diskStorage({
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + "-" + uniqueSuffix + ".mp3");
+    cb(null, file.originalname);
   },
+
   destination: function (req, file, cb) {
     cb(null, "./uploads");
   },
 });
 
-const upload = multer({ storage });
+const upload = multer({ storage: storage });
 
 const app = express();
 const port = 8080;
@@ -53,11 +53,13 @@ app.post("/upload-audio", upload.single("file"), async (req, res) => {
   const error = ffmpegprocess.error;
 
   if (error) {
+    process.chdir("/Users/joelmathew/WebProjects/emoic/backend");
     res.send({
       status: false,
       message: "Some error occurred",
     });
   } else {
+    process.chdir("/Users/joelmathew/WebProjects/emoic/backend");
     res.send({
       status: true,
       convertedAudioFile: `${fileName}.wav`,
