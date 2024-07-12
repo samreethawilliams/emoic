@@ -52,6 +52,7 @@ const Home = () => {
             justifyContent: "center",
             height: 48,
             borderRadius: 8,
+            width: "80%",
           }}
         >
           <Text style={{ color: "#FFFFFF", fontSize: 18, padding: 5 }}>
@@ -59,7 +60,7 @@ const Home = () => {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate("Player")}
+          onPress={() => navigation.navigate("Dashboard")}
           style={{
             backgroundColor: "#3E8B9A",
             alignItems: "center",
@@ -68,7 +69,7 @@ const Home = () => {
             borderRadius: 8,
           }}
         >
-          <Text style={{ color: "#FFFFFF", fontSize: 18 }}>AudioPlayer</Text>
+          <Text style={{ color: "#FFFFFF", fontSize: 18 }}>Dashboard</Text>
         </TouchableOpacity>
       </View>
     </View>
