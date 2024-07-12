@@ -168,6 +168,6 @@ if (process.env.USE_NGROK === "true") {
   ngrok
     .connect({ addr: port, authtoken_from_env: true })
     .then((listener) =>
-      console.log(`Ingress established at: ${listener.url()}`)
+      console.log(`Upload server: Ingress established at: ${listener.url()}`)
     );
 }

@@ -13,6 +13,9 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Footer from "./components/footer";
 import { UPLOAD_SERVER } from "./utils/constants";
+import { RootSiblingParent } from "react-native-root-siblings";
+import Toast from "react-native-root-toast";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const AudioRecord = () => {
   const [recording, setRecording] = useState(null);
@@ -21,7 +24,18 @@ const AudioRecord = () => {
   const [recordedAudio, setRecordedAudio] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const [user, setUser] = useState(null);
+
   const navigation = useNavigation();
+
+  const getUserData = async () => {
+    const value = await AsyncStorage.getItem("user");
+    setUser(JSON.parse(value));
+  };
+
+  useEffect(() => {
+    getUserData();
+  }, []);
 
   useEffect(() => {
     async function getPermission() {
@@ -140,6 +154,21 @@ const AudioRecord = () => {
       });
       const res = await fetchCall.json();
       console.log("response from /upload-audio: ", res);
+
+      if (res.message === "Some error occurred") {
+        Toast.show(res.message + ". Please try again.", {
+          duration: Toast.durations.SHORT,
+        });
+      }
+
+      if (res.message === "Sucessfully uploaded and converted the files") {
+        // TODO: make request to transcribe server
+        navigation.navigate("Player", {
+          audioName: recordedAudio.fileName,
+          audioAuthor: user.name ?? "Unknown",
+          fileUri: recordedAudio.file,
+        });
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -148,44 +177,51 @@ const AudioRecord = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={handleRecordButtonPress}>
-        <FontAwesome
-          name={recording ? "stop-circle" : "circle"}
-          size={64}
-          color="white"
-        />
-      </TouchableOpacity>
-      <Text style={styles.recordingStatusText}>
-        {`Recording status: ${recordingStatus}`}
-      </Text>
-
-      {recordedAudio && (
-        <View style={styles.row}>
-          <Text style={styles.fill}>Recording | {recordedAudio.duration}</Text>
-          <Button
-            onPress={() => recordedAudio.sound.replayAsync()}
-            title="Play"
+    <RootSiblingParent>
+      <View style={styles.container}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleRecordButtonPress}
+        >
+          <FontAwesome
+            name={recording ? "stop-circle" : "circle"}
+            size={64}
+            color="white"
           />
-        </View>
-      )}
+        </TouchableOpacity>
+        <Text style={styles.recordingStatusText}>
+          {`Recording status: ${recordingStatus}`}
+        </Text>
 
-      {recordingStatus === "stopped" && (
-        <View style={{ marginTop: 20 }}>
-          {loading ? (
-            <ActivityIndicator size="small" color="#3E8B9A" />
-          ) : (
-            <TouchableOpacity
-              onPress={() => uploadToServer()}
-              style={styles.continueButton}
-            >
-              <Text style={styles.continueButtonText}>Analyze</Text>
-            </TouchableOpacity>
-          )}
-        </View>
-      )}
-      <Footer />
-    </View>
+        {recordedAudio && (
+          <View style={styles.row}>
+            <Text style={styles.fill}>
+              Recording | {recordedAudio.duration}
+            </Text>
+            <Button
+              onPress={() => recordedAudio.sound.replayAsync()}
+              title="Play"
+            />
+          </View>
+        )}
+
+        {recordingStatus === "stopped" && (
+          <View style={{ marginTop: 20 }}>
+            {loading ? (
+              <ActivityIndicator size="small" color="#3E8B9A" />
+            ) : (
+              <TouchableOpacity
+                onPress={() => uploadToServer()}
+                style={styles.continueButton}
+              >
+                <Text style={styles.continueButtonText}>Analyze</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        )}
+        <Footer />
+      </View>
+    </RootSiblingParent>
   );
 };
 

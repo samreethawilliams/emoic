@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  Button,
-  ScrollView,
-} from "react-native";
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Slider from "@react-native-community/slider";
 import { Audio } from "expo-av";
 import { LinearGradient } from "expo-linear-gradient";
 // import Footer from "./components/footer";
+import { useRoute } from "@react-navigation/native";
 
 const Player = () => {
+  const route = useRoute();
   const navigation = useNavigation();
   const lyrics =
     "Twinkle, twinkle, little star,   How I wonder what you are! Up above the world so high, Like a diamond in the sky.";
@@ -35,9 +30,12 @@ const Player = () => {
       } else {
         console.log("Loading Sound");
         const { sound } = await Audio.Sound.createAsync(
-          require("../assets/sounds/sample.mp3"),
+          { uri: route.params.fileUri },
           {},
-          (status) => setPlaybackStatus(status),
+          (status) => {
+            console.log("playback status: ", playbackStatus);
+            setPlaybackStatus(status);
+          },
         );
         setSound(sound);
         console.log("Playing Sound");
@@ -105,13 +103,13 @@ const Player = () => {
         >
           <Text style={{ fontSize: 200 }}>😊</Text>
         </View>
-        <View style={{ marginTop: 30, marginBottom: 10 }}>
-          <Text style={{ fontSize: 24, fontWeight: "bold" }}>
-            Name of the Audio
+        <View style={{ marginTop: 30, marginBottom: 5 }}>
+          <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+            {route.params.audioName}
           </Text>
         </View>
         <View style={{ marginBottom: 20 }}>
-          <Text>Artist</Text>
+          <Text>{route.params.audioAuthor}</Text>
         </View>
         <Slider
           style={{ width: 300, height: 50, marginLeft: 20, marginRight: 20 }}
