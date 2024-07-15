@@ -101,7 +101,7 @@ const Player = () => {
             justifyContent: "center",
           }}
         >
-          <Text style={{ fontSize: 200 }}>😊</Text>
+          <Text style={{ fontSize: 180 }}>😊</Text>
         </View>
         <View style={{ marginTop: 30, marginBottom: 5 }}>
           <Text style={{ fontSize: 18, fontWeight: "bold" }}>
