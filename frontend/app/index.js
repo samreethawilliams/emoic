@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import EmoicLogo from "./svgs/EmoicLogo";
 import Bg from "./svgs/Bg";
-//import SplashScreen from "./SplashScreen";
+import SplashScreen from "./SplashScreen";
 
 const Home = () => {
   const navigation = useNavigation();
@@ -60,7 +60,8 @@ const Home = () => {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate("Player")}
+          onPress={() => navigation.navigate("SplashScreen")}
+          // onPress={() => navigation.navigate("Player")}
           style={{
             backgroundColor: "#3E8B9A",
             alignItems: "center",
