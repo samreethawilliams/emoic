@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import EmoicLogo from "./svgs/EmoicLogo";
 import Bg from "./svgs/Bg";
+//import SplashScreen from "./SplashScreen";
 
 const Home = () => {
   const navigation = useNavigation();
