@@ -45,7 +45,7 @@ app.get("/transcribe", async (req, res) => {
     let sentence = "";
     transcript.forEach((trans) => {
       // we have reached the end of a sentence
-      if (trans.speech === ".") {
+      if (trans.speech === "." || trans.speech === ",") {
         // no space at the end
         sentence += trans.speech;
         sentences.push(sentence);
