@@ -10,7 +10,7 @@ const UploadAudio = () => {
   const handleNavigateFiles = async () => {
     try {
       const res = await DocumentPicker.getDocumentAsync({
-        type: "audio/",
+        type: "audio/*",
       });
 
       console.log("DocumentPicker Result:", res);
