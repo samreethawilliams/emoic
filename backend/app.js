@@ -15,15 +15,15 @@ await client.connect();
 
 const storage = multer.diskStorage({
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + "-" + uniqueSuffix + ".mp3");
+    cb(null, file.originalname);
   },
+
   destination: function (req, file, cb) {
     cb(null, "./uploads");
   },
 });
 
-const upload = multer({ storage });
+const upload = multer({ storage: storage });
 
 const app = express();
 const port = 8080;
@@ -35,7 +35,9 @@ app.get("/", (req, res) => {
   res.json("Emoic says hello!!");
 });
 
-app.post("/upload_files", upload.single("file"), async (req, res) => {
+app.post("/upload-audio", upload.single("file"), async (req, res) => {
+  console.log(req.body);
+  console.log(req.file);
   const originalFileName = req.file.filename;
   process.chdir("/Users/joelmathew/WebProjects/emoic/backend/uploads");
   const [fileName] = originalFileName.split(".mp3");
@@ -51,11 +53,13 @@ app.post("/upload_files", upload.single("file"), async (req, res) => {
   const error = ffmpegprocess.error;
 
   if (error) {
+    process.chdir("/Users/joelmathew/WebProjects/emoic/backend");
     res.send({
       status: false,
       message: "Some error occurred",
     });
   } else {
+    process.chdir("/Users/joelmathew/WebProjects/emoic/backend");
     res.send({
       status: true,
       convertedAudioFile: `${fileName}.wav`,
@@ -164,6 +168,6 @@ if (process.env.USE_NGROK === "true") {
   ngrok
     .connect({ addr: port, authtoken_from_env: true })
     .then((listener) =>
-      console.log(`Ingress established at: ${listener.url()}`)
+      console.log(`Upload server: Ingress established at: ${listener.url()}`)
     );
 }

@@ -1,18 +1,41 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, Button, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Button,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
 import { Audio } from "expo-av";
 import * as FileSystem from "expo-file-system";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Footer from "./components/footer";
+import { TRANSCRIBE_SERVER, UPLOAD_SERVER } from "./utils/constants";
+import { RootSiblingParent } from "react-native-root-siblings";
+import Toast from "react-native-root-toast";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const AudioRecord = () => {
   const [recording, setRecording] = useState(null);
   const [recordingStatus, setRecordingStatus] = useState("idle");
   const [audioPermission, setAudioPermission] = useState(null);
   const [recordedAudio, setRecordedAudio] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const [user, setUser] = useState(null);
 
   const navigation = useNavigation();
+
+  const getUserData = async () => {
+    const value = await AsyncStorage.getItem("user");
+    setUser(JSON.parse(value));
+  };
+
+  useEffect(() => {
+    getUserData();
+  }, []);
 
   useEffect(() => {
     async function getPermission() {
@@ -57,6 +80,10 @@ const AudioRecord = () => {
     try {
       if (recordingStatus === "recording") {
         console.log("Stopping Recording");
+        await Audio.setAudioModeAsync({
+          allowsRecordingIOS: false,
+          playsInSilentModeIOS: true,
+        });
         await recording.stopAndUnloadAsync();
         const recordingUri = recording.getURI();
         const fileName = `recording-${Date.now()}.mp3`;
@@ -81,6 +108,7 @@ const AudioRecord = () => {
             (await sound.getStatusAsync()).durationMillis,
           ),
           file: fileUri,
+          fileName,
         });
 
         setRecording(null);
@@ -105,41 +133,138 @@ const AudioRecord = () => {
     }
   }
 
+  // api call
+  async function uploadToServer() {
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", {
+        uri: recordedAudio.file,
+        type: "audio/mp3",
+        name: recordedAudio.fileName,
+      });
+
+      const fetchCall = await fetch(`${UPLOAD_SERVER}/upload-audio`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "multipart/form-data",
+        },
+        body: formData,
+      });
+      const res = await fetchCall.json();
+      console.log("response from /upload-audio: ", res);
+
+      if (res.message === "Some error occurred") {
+        Toast.show(res.message + ". Please try again.", {
+          duration: Toast.durations.SHORT,
+        });
+      }
+
+      if (res.message === "Sucessfully uploaded and converted the files") {
+        Toast.show(
+          "Audio file has been uploaded and converted. Currently transcribing",
+          {
+            duration: Toast.durations.SHORT,
+          },
+        );
+        await getTranscript(res.convertedAudioFile);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // api call
+  async function getTranscript(audioNameToTranscribe) {
+    setLoading(true);
+    console.log(audioNameToTranscribe);
+    console.log(TRANSCRIBE_SERVER);
+    try {
+      const fetchCall = await fetch(
+        `${TRANSCRIBE_SERVER}/transcribe?audioName=${audioNameToTranscribe}`,
+        {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        },
+      );
+      const res = await fetchCall.json();
+      console.log("response from /transcribe: ", res);
+
+      if (res.message === "Some error occured") {
+        Toast.show(res.message + ". Please try again.", {
+          duration: Toast.durations.SHORT,
+        });
+      }
+
+      if (res.status === true) {
+        navigation.navigate("Player", {
+          audioName: recordedAudio.fileName,
+          audioAuthor: user.name ?? "Unknown",
+          fileUri: recordedAudio.file,
+          transcript: res.transcript,
+        });
+      }
+
+      // success
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={handleRecordButtonPress}>
-        <FontAwesome
-          name={recording ? "stop-circle" : "circle"}
-          size={64}
-          color="white"
-        />
-      </TouchableOpacity>
-      <Text style={styles.recordingStatusText}>
-        {`Recording status: ${recordingStatus}`}
-      </Text>
-
-      {recordedAudio && (
-        <View style={styles.row}>
-          <Text style={styles.fill}>Recording | {recordedAudio.duration}</Text>
-          <Button
-            onPress={() => recordedAudio.sound.replayAsync()}
-            title="Play"
+    <RootSiblingParent>
+      <View style={styles.container}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleRecordButtonPress}
+        >
+          <FontAwesome
+            name={recording ? "stop-circle" : "circle"}
+            size={64}
+            color="white"
           />
-        </View>
-      )}
+        </TouchableOpacity>
+        <Text style={styles.recordingStatusText}>
+          {`Recording status: ${recordingStatus}`}
+        </Text>
 
-      {recordingStatus === "stopped" && (
-        <View style={{ marginTop: 20 }}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Player")}
-            style={styles.continueButton}
-          >
-            <Text style={styles.continueButtonText}>Analyze</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-      <Footer />
-    </View>
+        {recordedAudio && (
+          <View style={styles.row}>
+            <Text style={styles.fill}>
+              Recording | {recordedAudio.duration}
+            </Text>
+            <Button
+              onPress={() => recordedAudio.sound.replayAsync()}
+              title="Play"
+            />
+          </View>
+        )}
+
+        {recordingStatus === "stopped" && (
+          <View style={{ marginTop: 20 }}>
+            {loading ? (
+              <ActivityIndicator size="small" color="#3E8B9A" />
+            ) : (
+              <TouchableOpacity
+                onPress={() => uploadToServer()}
+                style={styles.continueButton}
+              >
+                <Text style={styles.continueButtonText}>Analyze</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        )}
+        <Footer />
+      </View>
+    </RootSiblingParent>
   );
 };
 
@@ -179,7 +304,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: 48,
-    width: 150,
+    width: 350,
     borderRadius: 8,
   },
   continueButtonText: {
