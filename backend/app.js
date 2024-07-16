@@ -160,6 +160,32 @@ app.post("/login", async (req, res) => {
   });
 });
 
+app.get("/audio-history", async (req, res) => {
+  const { userId } = req.query;
+
+  let audioRecords;
+  try {
+    const queryRes = await client.query(
+      `
+      select * from audios where userId=$1;
+      `,
+      [userId]
+    );
+    audioRecords = queryRes.rows;
+  } catch (err) {
+    console.log(err);
+    return res.send({
+      status: false,
+      message: "Some error occurred",
+    });
+  }
+
+  return res.send({
+    status: true,
+    history: audioRecords,
+  });
+});
+
 app.listen(port, () => {
   console.log(`Upload server listening at http://localhost:${port}`);
 });
