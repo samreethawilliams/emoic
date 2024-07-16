@@ -101,26 +101,6 @@ const Player = () => {
     return `${formattedMinutes}:${formattedSeconds}`;
   }
 
-  // function isCurrentTimeInRange(currentTime, transcript) {
-  //   const currentTimeMillis = timeStringToMillis(currentTime);
-  //   console.log("currentTimeMillis: ", currentTimeMillis);
-
-  //   return transcript.some((trans) => {
-  //     if (
-  //       currentTimeMillis >= trans.startMillis &&
-  //       currentTimeMillis <= trans.endMillis
-  //     ) {
-  //       console.log(
-  //         `trans.startMillis: ${trans.startMillis}, trans.endMillis: ${trans.endMillis}`,
-  //       );
-  //     }
-  //     return (
-  //       currentTimeMillis >= trans.startMillis &&
-  //       currentTimeMillis <= trans.endMillis
-  //     );
-  //   });
-  // }
-
   function isCurrentTimeInRange(currentTime, sentences) {
     const currentTimeMillis = timestampToMillis(currentTime);
     console.log("currentTimeMillis: ", currentTimeMillis);
@@ -142,6 +122,14 @@ const Player = () => {
       return "😄";
     } else {
       return "🙂";
+    }
+  }
+
+  async function replaySound() {
+    if (sound) {
+      setIsPlaying(true);
+      console.log("Replaying Sound");
+      await sound.replayAsync();
     }
   }
 
@@ -238,7 +226,7 @@ const Player = () => {
             style={{
               marginBottom: 10,
             }}
-            onPress={() => navigation.navigate("Dashboard")}
+            onPress={replaySound}
           >
             <View
               style={{
