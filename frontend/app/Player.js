@@ -137,7 +137,7 @@ const Player = () => {
     if (currentTranscript.sentiment.score === 0) {
       return "😐";
     } else if (currentTranscript.sentiment.score < 0) {
-      return "😠";
+      return "😔";
     } else if (currentTranscript.sentiment.score > 0) {
       return "😄";
     } else {
