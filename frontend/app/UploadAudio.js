@@ -31,12 +31,7 @@ const UploadAudio = () => {
   }, []);
 
   // api call
-  async function getTranscript(
-    fileUri,
-    fileName,
-    audioNameToTranscribe,
-    originalAudioFile,
-  ) {
+  async function getTranscript(fileUri, audioNameToTranscribe, mp3FileName) {
     setLoading(true);
     try {
       const fetchCall = await fetch(`${TRANSCRIBE_SERVER}/transcribe`, {
@@ -47,8 +42,10 @@ const UploadAudio = () => {
         },
         body: JSON.stringify({
           audioName: audioNameToTranscribe,
-          originalAudioFile,
+          originalAudioFile: mp3FileName,
           userId: user.id,
+          saveToHistory: true,
+          fileUri,
         }),
       });
       const res = await fetchCall.json();
@@ -65,7 +62,7 @@ const UploadAudio = () => {
 
       if (res.status === true) {
         navigation.navigate("Player", {
-          audioName: fileName,
+          audioName: mp3FileName,
           audioAuthor: "Unknown",
           fileUri,
           transcript: res.transcript,
@@ -117,12 +114,8 @@ const UploadAudio = () => {
             duration: Toast.durations.SHORT,
           },
         );
-        await getTranscript(
-          fileUri,
-          fileName,
-          res.convertedAudioFile,
-          fileName,
-        );
+        // fileUri, audioNameToTranscribe, mp3FileName
+        await getTranscript(fileUri, res.convertedAudioFile, newFileName);
       }
     } catch (error) {
       console.error(error);
