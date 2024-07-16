@@ -5,6 +5,14 @@ import { fileURLToPath } from "url";
 import { whisper } from "whisper-node";
 import ngrok from "@ngrok/ngrok";
 import Sentiment from "sentiment";
+import pg from "pg";
+
+// database connection
+const { Client } = pg;
+const connectionString = "postgresql://postgres:postgres@localhost:5432/emoic";
+
+const client = new Client({ connectionString });
+await client.connect();
 
 function timestampToMillis(timestamp) {
   const [hours, minutes, seconds] = timestamp.split(":");
@@ -12,6 +20,23 @@ function timestampToMillis(timestamp) {
   return (
     Number(hours) * 3600000 + Number(minutes) * 60000 + secs * 1000 + millis
   );
+}
+
+function maxFreq(array) {
+  if (array.length == 0) return null;
+  const modeMap = {};
+  let maxEl = array[0],
+    maxCount = 1;
+  for (let i = 0; i < array.length; i++) {
+    let el = array[i];
+    if (modeMap[el] == null) modeMap[el] = 1;
+    else modeMap[el]++;
+    if (modeMap[el] > maxCount) {
+      maxEl = el;
+      maxCount = modeMap[el];
+    }
+  }
+  return maxEl;
 }
 
 function constructSentencesWithEmotion(data) {
@@ -63,9 +88,10 @@ app.get("/", (req, res) => {
   res.json("Transcribe server says hi!");
 });
 
-app.get("/transcribe", async (req, res) => {
+app.post("/transcribe", async (req, res) => {
+  const { audioName, originalAudioFile, userId } = req.body;
   // Need to provide exact path to your audio file.
-  const filePath = path.resolve(__dirname, `uploads/${req.query.audioName}`);
+  const filePath = path.resolve(__dirname, `uploads/${audioName}`);
 
   const options = {
     modelName: "base.en", // default
@@ -86,6 +112,43 @@ app.get("/transcribe", async (req, res) => {
   if (transcript) {
     const transcriptWithTimeStamp = constructSentencesWithEmotion(transcript);
     console.log(transcriptWithTimeStamp);
+
+    // insert audio into database for dashboard
+    const allScores = [];
+    transcriptWithTimeStamp.forEach((trans) => {
+      allScores.push(trans.sentiment.score);
+    });
+
+    const freqScore = maxFreq(allScores);
+    let freqEmotion = "🙂";
+
+    if (freqScore === 0) {
+      freqEmotion = "😐";
+    } else if (freqScore < 0) {
+      freqEmotion = "😔";
+    } else if (freqScore > 0) {
+      freqEmotion = "😄";
+    }
+
+    console.log("freqScore: ", freqScore);
+
+    try {
+      await client.query(
+        `
+        insert into audios
+        (name, emotion, userId)
+        values
+        ($1, $2, $3)`,
+        [originalAudioFile, freqEmotion, userId]
+      );
+    } catch (err) {
+      console.error(err);
+      return res.send({
+        status: false,
+        message: "Some database error occurred",
+      });
+    }
+
     return res.send({
       status: true,
       transcript: transcriptWithTimeStamp,

@@ -168,7 +168,7 @@ const AudioRecord = () => {
             duration: Toast.durations.SHORT,
           },
         );
-        await getTranscript(res.convertedAudioFile);
+        await getTranscript(res.convertedAudioFile, res.originalAudioFile);
       }
     } catch (error) {
       console.error(error);
@@ -178,25 +178,30 @@ const AudioRecord = () => {
   }
 
   // api call
-  async function getTranscript(audioNameToTranscribe) {
+  async function getTranscript(audioNameToTranscribe, originalAudioFile) {
     setLoading(true);
     console.log(audioNameToTranscribe);
     console.log(TRANSCRIBE_SERVER);
     try {
-      const fetchCall = await fetch(
-        `${TRANSCRIBE_SERVER}/transcribe?audioName=${audioNameToTranscribe}`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
+      const fetchCall = await fetch(`${TRANSCRIBE_SERVER}/transcribe`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          audioName: audioNameToTranscribe,
+          originalAudioFile,
+          userId: user.id,
+        }),
+      });
       const res = await fetchCall.json();
       console.log("response from /transcribe: ", res);
 
-      if (res.message === "Some error occured") {
+      if (
+        res.message === "Some error occured" ||
+        res.message === "Some database error occurred"
+      ) {
         Toast.show(res.message + ". Please try again.", {
           duration: Toast.durations.SHORT,
         });

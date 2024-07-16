@@ -1,17 +1,20 @@
-import { View, Text, FlatList, Image } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import React, { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
 import Footer from "./components/footer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { UPLOAD_SERVER } from "./utils/constants";
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
-  const audioHistory = [
-    { id: "1", name: "Audio File 1", emoticon: "😊" },
-    { id: "2", name: "Audio File 2", emoticon: "☹️" },
-    { id: "3", name: "Audio File 3", emoticon: "😭" },
-    { id: "4", name: "Audio File 4", emoticon: "😡" },
-  ];
+  const [audioHistory, setAudioHistory] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const getUserData = async () => {
     const value = await AsyncStorage.getItem("user");
@@ -21,6 +24,42 @@ const Dashboard = () => {
   useEffect(() => {
     getUserData();
   }, []);
+
+  const getHistory = async () => {
+    console.log(user);
+    // no user so dont make the call
+    if (!user) return;
+
+    setLoading(true);
+
+    try {
+      const fetchCall = await fetch(
+        `${UPLOAD_SERVER}/audio-history?userId=${user.id}`,
+        {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        },
+      );
+      const res = await fetchCall.json();
+
+      console.log("result from /audio-history: ", res);
+
+      if (res.status) {
+        setAudioHistory(res.history);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getHistory();
+  }, [user]);
 
   const renderItem = ({ item }) => (
     <View
@@ -35,11 +74,18 @@ const Dashboard = () => {
         justifyContent: "space-between",
       }}
     >
-      <Text style={{ fontSize: 16 }}>{item.name}</Text>
-      <Text style={{ fontSize: 24 }}>{item.emoticon}</Text>
+      <View>
+        <Text style={{ fontSize: 14, fontWeight: "bold", color: "#807e7e" }}>
+          Audio Name
+        </Text>
+        <Text style={{ fontSize: 16, marginTop: 8, color: "#000000" }}>
+          {item.name}
+        </Text>
+      </View>
+      <Text style={{ fontSize: 24 }}>{item.emotion}</Text>
     </View>
   );
-  const navigation = useNavigation();
+
   return (
     <View
       style={{ flex: 1, borderColor: "#3E8B9A", borderWidth: 2, padding: 2 }}
@@ -82,6 +128,7 @@ const Dashboard = () => {
         <View
           style={{
             width: "100%",
+            marginTop: 20,
           }}
         >
           <Text
@@ -93,18 +140,54 @@ const Dashboard = () => {
           >
             Audio History
           </Text>
-          <View
-            style={{
-              padding: 10,
-              marginBottom: 20,
-            }}
-          >
-            <FlatList
-              data={audioHistory}
-              renderItem={renderItem}
-              keyExtractor={(item) => item.id}
-            />
-          </View>
+          {!audioHistory || (audioHistory && audioHistory.length === 0) ? (
+            <View style={{ marginTop: 20 }}>
+              <Text
+                style={{
+                  fontSize: 15,
+                }}
+              >
+                Oops, no history currently available to display
+              </Text>
+              {loading ? (
+                <ActivityIndicator
+                  size="small"
+                  color="#3E8B9A"
+                  style={{ marginTop: 30 }}
+                />
+              ) : (
+                <TouchableOpacity
+                  onPress={getHistory}
+                  style={{
+                    backgroundColor: "#3E8B9A",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: 48,
+                    borderRadius: 8,
+                    width: "100%",
+                    marginTop: 10,
+                  }}
+                >
+                  <Text style={{ color: "#FFFFFF", fontSize: 18, padding: 5 }}>
+                    Refresh
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          ) : (
+            <View
+              style={{
+                padding: 10,
+                marginBottom: 20,
+              }}
+            >
+              <FlatList
+                data={audioHistory}
+                renderItem={renderItem}
+                keyExtractor={(item) => item.id}
+              />
+            </View>
+          )}
         </View>
         <Footer />
       </View>

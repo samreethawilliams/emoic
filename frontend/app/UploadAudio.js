@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -13,30 +13,51 @@ import { TRANSCRIBE_SERVER, UPLOAD_SERVER } from "./utils/constants";
 import { RootSiblingParent } from "react-native-root-siblings";
 import Toast from "react-native-root-toast";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const UploadAudio = () => {
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(null);
 
   const navigation = useNavigation();
 
+  const getUserData = async () => {
+    const value = await AsyncStorage.getItem("user");
+    setUser(JSON.parse(value));
+  };
+
+  useEffect(() => {
+    getUserData();
+  }, []);
+
   // api call
-  async function getTranscript(fileUri, fileName, audioNameToTranscribe) {
+  async function getTranscript(
+    fileUri,
+    fileName,
+    audioNameToTranscribe,
+    originalAudioFile,
+  ) {
     setLoading(true);
     try {
-      const fetchCall = await fetch(
-        `${TRANSCRIBE_SERVER}/transcribe?audioName=${audioNameToTranscribe}`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
+      const fetchCall = await fetch(`${TRANSCRIBE_SERVER}/transcribe`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          audioName: audioNameToTranscribe,
+          originalAudioFile,
+          userId: user.id,
+        }),
+      });
       const res = await fetchCall.json();
       console.log("response from /transcribe: ", res);
 
-      if (res.message === "Some error occured") {
+      if (
+        res.message === "Some error occured" ||
+        res.message === "Some database error occurred"
+      ) {
         Toast.show(res.message + ". Please try again.", {
           duration: Toast.durations.SHORT,
         });
@@ -96,7 +117,12 @@ const UploadAudio = () => {
             duration: Toast.durations.SHORT,
           },
         );
-        await getTranscript(fileUri, fileName, res.convertedAudioFile);
+        await getTranscript(
+          fileUri,
+          fileName,
+          res.convertedAudioFile,
+          fileName,
+        );
       }
     } catch (error) {
       console.error(error);

@@ -62,6 +62,7 @@ app.post("/upload-audio", upload.single("file"), async (req, res) => {
     process.chdir("/Users/joelmathew/WebProjects/emoic/backend");
     res.send({
       status: true,
+      originalAudioFile: originalFileName,
       convertedAudioFile: `${fileName}.wav`,
       message: "Sucessfully uploaded and converted the files",
     });
@@ -155,7 +156,33 @@ app.post("/login", async (req, res) => {
 
   return res.send({
     status: true,
-    user: { name: user.name, email },
+    user: { id: user.id, name: user.name, email },
+  });
+});
+
+app.get("/audio-history", async (req, res) => {
+  const { userId } = req.query;
+
+  let audioRecords;
+  try {
+    const queryRes = await client.query(
+      `
+      select * from audios where userId=$1;
+      `,
+      [userId]
+    );
+    audioRecords = queryRes.rows;
+  } catch (err) {
+    console.log(err);
+    return res.send({
+      status: false,
+      message: "Some error occurred",
+    });
+  }
+
+  return res.send({
+    status: true,
+    history: audioRecords,
   });
 });
 

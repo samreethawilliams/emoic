@@ -45,7 +45,7 @@ const Home = () => {
           Let the music reflect the emotions..
         </Text>
         <TouchableOpacity
-          onPress={() => navigation.navigate("AudioRecord", { id: 5 })}
+          onPress={() => navigation.navigate("Dashboard")}
           style={{
             backgroundColor: "#3E8B9A",
             alignItems: "center",
@@ -58,18 +58,6 @@ const Home = () => {
           <Text style={{ color: "#FFFFFF", fontSize: 18, padding: 5 }}>
             Get Started
           </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("Dashboard")}
-          style={{
-            backgroundColor: "#3E8B9A",
-            alignItems: "center",
-            justifyContent: "center",
-            height: 48,
-            borderRadius: 8,
-          }}
-        >
-          <Text style={{ color: "#FFFFFF", fontSize: 18 }}>Dashboard</Text>
         </TouchableOpacity>
       </View>
     </View>
