@@ -1,4 +1,11 @@
-import { View, Text, FlatList, Image } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import Footer from "./components/footer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -7,6 +14,7 @@ import { UPLOAD_SERVER } from "./utils/constants";
 const Dashboard = () => {
   const [user, setUser] = useState(null);
   const [audioHistory, setAudioHistory] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const getUserData = async () => {
     const value = await AsyncStorage.getItem("user");
@@ -22,7 +30,7 @@ const Dashboard = () => {
     // no user so dont make the call
     if (!user) return;
 
-    console.log(`${UPLOAD_SERVER}/audio-history?userId=${user.id}`);
+    setLoading(true);
 
     try {
       const fetchCall = await fetch(
@@ -44,6 +52,8 @@ const Dashboard = () => {
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -130,7 +140,41 @@ const Dashboard = () => {
           >
             Audio History
           </Text>
-          {audioHistory ? (
+          {!audioHistory || (audioHistory && audioHistory.length === 0) ? (
+            <View style={{ marginTop: 20 }}>
+              <Text
+                style={{
+                  fontSize: 15,
+                }}
+              >
+                Oops, no history currently available to display
+              </Text>
+              {loading ? (
+                <ActivityIndicator
+                  size="small"
+                  color="#3E8B9A"
+                  style={{ marginTop: 30 }}
+                />
+              ) : (
+                <TouchableOpacity
+                  onPress={getHistory}
+                  style={{
+                    backgroundColor: "#3E8B9A",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: 48,
+                    borderRadius: 8,
+                    width: "100%",
+                    marginTop: 10,
+                  }}
+                >
+                  <Text style={{ color: "#FFFFFF", fontSize: 18, padding: 5 }}>
+                    Refresh
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          ) : (
             <View
               style={{
                 padding: 10,
@@ -143,15 +187,6 @@ const Dashboard = () => {
                 keyExtractor={(item) => item.id}
               />
             </View>
-          ) : (
-            <Text
-              style={{
-                fontSize: 15,
-                marginTop: -5,
-              }}
-            >
-              Oops, no history currently available to display
-            </Text>
           )}
         </View>
         <Footer />
