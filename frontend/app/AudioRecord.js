@@ -12,7 +12,7 @@ import * as FileSystem from "expo-file-system";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Footer from "./components/footer";
-import { UPLOAD_SERVER } from "./utils/constants";
+import { TRANSCRIBE_SERVER, UPLOAD_SERVER } from "./utils/constants";
 import { RootSiblingParent } from "react-native-root-siblings";
 import Toast from "react-native-root-toast";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -133,8 +133,8 @@ const AudioRecord = () => {
     }
   }
 
+  // api call
   async function uploadToServer() {
-    console.log("fileUri in uploadToServer", recordedAudio);
     setLoading(true);
     try {
       const formData = new FormData();
@@ -162,13 +162,56 @@ const AudioRecord = () => {
       }
 
       if (res.message === "Sucessfully uploaded and converted the files") {
-        // TODO: make request to transcribe server
+        Toast.show(
+          "Audio file has been uploaded and converted. Currently transcribing",
+          {
+            duration: Toast.durations.SHORT,
+          },
+        );
+        await getTranscript(res.convertedAudioFile);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // api call
+  async function getTranscript(audioNameToTranscribe) {
+    setLoading(true);
+    console.log(audioNameToTranscribe);
+    console.log(TRANSCRIBE_SERVER);
+    try {
+      const fetchCall = await fetch(
+        `${TRANSCRIBE_SERVER}/transcribe?audioName=${audioNameToTranscribe}`,
+        {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        },
+      );
+      const res = await fetchCall.json();
+      console.log("response from /transcribe: ", res);
+
+      if (res.message === "Some error occured") {
+        Toast.show(res.message + ". Please try again.", {
+          duration: Toast.durations.SHORT,
+        });
+      }
+
+      if (res.status === true) {
         navigation.navigate("Player", {
           audioName: recordedAudio.fileName,
           audioAuthor: user.name ?? "Unknown",
           fileUri: recordedAudio.file,
+          transcript: res.transcript,
         });
       }
+
+      // success
     } catch (error) {
       console.error(error);
     } finally {

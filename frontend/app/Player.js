@@ -5,14 +5,13 @@ import { useNavigation } from "@react-navigation/native";
 import Slider from "@react-native-community/slider";
 import { Audio } from "expo-av";
 import { LinearGradient } from "expo-linear-gradient";
-// import Footer from "./components/footer";
+import Footer from "./components/footer";
 import { useRoute } from "@react-navigation/native";
+import { timestampToMillis } from "./utils/utils";
 
 const Player = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  const lyrics =
-    "Twinkle, twinkle, little star,   How I wonder what you are! Up above the world so high, Like a diamond in the sky.";
 
   const [sound, setSound] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -63,25 +62,93 @@ const Player = () => {
 
   const getCurrentTime = () => {
     if (playbackStatus) {
-      const minutes = Math.floor(playbackStatus.positionMillis / 60000);
+      const hours = Math.floor(playbackStatus.positionMillis / 3600000);
+      const minutes = Math.floor(
+        (playbackStatus.positionMillis % 3600000) / 60000,
+      );
       const seconds = Math.floor(
         (playbackStatus.positionMillis % 60000) / 1000,
       );
-      return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+      const millis = playbackStatus.positionMillis % 1000;
+      return `${hours < 10 ? "0" : ""}${hours}:${minutes < 10 ? "0" : ""}${minutes}:${seconds < 10 ? "0" : ""}${seconds}.${millis < 100 ? (millis < 10 ? "00" : "0") : ""}${millis}`;
     }
-    return "0:00";
+    return "00:00:00.000";
   };
 
   const getDuration = () => {
     if (playbackStatus) {
-      const minutes = Math.floor(playbackStatus.durationMillis / 60000);
+      const hours = Math.floor(playbackStatus.durationMillis / 3600000);
+      const minutes = Math.floor(
+        (playbackStatus.durationMillis % 3600000) / 60000,
+      );
       const seconds = Math.floor(
         (playbackStatus.durationMillis % 60000) / 1000,
       );
-      return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+      const millis = playbackStatus.durationMillis % 1000;
+      return `${hours < 10 ? "0" : ""}${hours}:${minutes < 10 ? "0" : ""}${minutes}:${seconds < 10 ? "0" : ""}${seconds}.${millis < 100 ? (millis < 10 ? "00" : "0") : ""}${millis}`;
     }
-    return "0:00";
+    return "00:00:00.000";
   };
+
+  function convertToMinutesAndSeconds(timeString) {
+    const [hours, minutes, secondsWithMillis] = timeString.split(":");
+    const [seconds] = secondsWithMillis.split(".");
+
+    const totalMinutes = parseInt(hours, 10) * 60 + parseInt(minutes, 10);
+    const formattedMinutes = totalMinutes.toString().padStart(2, "0");
+    const formattedSeconds = parseInt(seconds, 10).toString().padStart(2, "0");
+
+    return `${formattedMinutes}:${formattedSeconds}`;
+  }
+
+  // function isCurrentTimeInRange(currentTime, transcript) {
+  //   const currentTimeMillis = timeStringToMillis(currentTime);
+  //   console.log("currentTimeMillis: ", currentTimeMillis);
+
+  //   return transcript.some((trans) => {
+  //     if (
+  //       currentTimeMillis >= trans.startMillis &&
+  //       currentTimeMillis <= trans.endMillis
+  //     ) {
+  //       console.log(
+  //         `trans.startMillis: ${trans.startMillis}, trans.endMillis: ${trans.endMillis}`,
+  //       );
+  //     }
+  //     return (
+  //       currentTimeMillis >= trans.startMillis &&
+  //       currentTimeMillis <= trans.endMillis
+  //     );
+  //   });
+  // }
+
+  function isCurrentTimeInRange(currentTime, sentences) {
+    const currentTimeMillis = timestampToMillis(currentTime);
+    console.log("currentTimeMillis: ", currentTimeMillis);
+
+    return sentences.find((sentence) => {
+      return (
+        currentTimeMillis >= sentence.startMillis &&
+        currentTimeMillis <= sentence.endMillis
+      );
+    });
+  }
+
+  function getEmotionEmoji(currentTranscript) {
+    if (currentTranscript.sentiment.score === 0) {
+      return "😐";
+    } else if (currentTranscript.sentiment.score < 0) {
+      return "😠";
+    } else if (currentTranscript.sentiment.score > 0) {
+      return "😄";
+    } else {
+      return "🙂";
+    }
+  }
+
+  const currentTranscript = isCurrentTimeInRange(
+    getCurrentTime(),
+    route.params.transcript,
+  );
 
   return (
     <LinearGradient
@@ -101,7 +168,13 @@ const Player = () => {
             justifyContent: "center",
           }}
         >
-          <Text style={{ fontSize: 180 }}>😊</Text>
+          {currentTranscript ? (
+            <Text style={{ fontSize: 180 }}>
+              {getEmotionEmoji(currentTranscript)}
+            </Text>
+          ) : (
+            <Text style={{ fontSize: 180 }}>😊</Text>
+          )}
         </View>
         <View style={{ marginTop: 30, marginBottom: 5 }}>
           <Text style={{ fontSize: 18, fontWeight: "bold" }}>
@@ -129,8 +202,8 @@ const Player = () => {
             marginRight: 20,
           }}
         >
-          <Text>{getCurrentTime()}</Text>
-          <Text>{getDuration()}</Text>
+          <Text>{convertToMinutesAndSeconds(getCurrentTime())}</Text>
+          <Text>{convertToMinutesAndSeconds(getDuration())}</Text>
         </View>
         <View
           style={{
@@ -177,7 +250,11 @@ const Player = () => {
                 alignItems: "center",
               }}
             >
-              <MaterialIcons name="dashboard" size={50} color="#3E8B9A" />
+              <MaterialIcons
+                name="replay-circle-filled"
+                size={60}
+                color="#3E8B9A"
+              />
             </View>
           </TouchableOpacity>
         </View>
@@ -187,19 +264,22 @@ const Player = () => {
               backgroundColor: "#FFFFFF",
               borderRadius: 10,
               padding: 10,
+              width: 300,
             }}
           >
-            <Text
-              style={{
-                fontSize: 20,
-                textAlign: "center",
-              }}
-            >
-              {lyrics}
-            </Text>
+            {currentTranscript ? (
+              <Text
+                style={{
+                  fontSize: 20,
+                  textAlign: "center",
+                }}
+              >
+                {currentTranscript.sentence}
+              </Text>
+            ) : null}
           </ScrollView>
         </View>
-        {/* <Footer /> */}
+        <Footer />
       </View>
     </LinearGradient>
   );

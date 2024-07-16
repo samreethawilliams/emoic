@@ -1,1 +1,2 @@
 export const UPLOAD_SERVER = process.env.EXPO_PUBLIC_API_URL;
+export const TRANSCRIBE_SERVER = process.env.EXPO_PUBLIC_TRANSCRIBE_API_URL;
