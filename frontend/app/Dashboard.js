@@ -13,6 +13,8 @@ import { TRANSCRIBE_SERVER, UPLOAD_SERVER } from "./utils/constants";
 import Toast from "react-native-root-toast";
 import { useNavigation } from "@react-navigation/native";
 import { RootSiblingParent } from "react-native-root-siblings";
+import { FontAwesome } from "@expo/vector-icons";
+import NothingHere from "./svgs/NothingHere";
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
@@ -202,17 +204,42 @@ const Dashboard = () => {
               marginTop: 20,
             }}
           >
-            <Text
+            <View
               style={{
-                fontSize: 20,
-                fontWeight: "bold",
-                marginBottom: 20,
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                width: "100%",
+                marginBottom: 25,
               }}
             >
-              Audio History
-            </Text>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: "bold",
+                  marginTop: 10,
+                }}
+              >
+                History
+              </Text>
+              <TouchableOpacity
+                onPress={getHistory}
+                style={{
+                  backgroundColor: "#3E8B9A",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: 8,
+                  padding: 12,
+                  marginLeft: "auto",
+                }}
+              >
+                <FontAwesome name={"refresh"} size={23} color="white" />
+              </TouchableOpacity>
+            </View>
             {!audioHistory || (audioHistory && audioHistory.length === 0) ? (
-              <View style={{ marginTop: 20 }}>
+              <View
+                style={{ marginTop: 15, display: "flex", alignItems: "center" }}
+              >
                 <Text
                   style={{
                     fontSize: 15,
@@ -220,32 +247,16 @@ const Dashboard = () => {
                 >
                   Oops, no history currently available to display
                 </Text>
+                <NothingHere
+                  style={{ width: 160, height: 160, marginTop: 25 }}
+                />
                 {loading ? (
                   <ActivityIndicator
                     size="small"
                     color="#3E8B9A"
                     style={{ marginTop: 30 }}
                   />
-                ) : (
-                  <TouchableOpacity
-                    onPress={getHistory}
-                    style={{
-                      backgroundColor: "#3E8B9A",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      height: 48,
-                      borderRadius: 8,
-                      width: "100%",
-                      marginTop: 10,
-                    }}
-                  >
-                    <Text
-                      style={{ color: "#FFFFFF", fontSize: 18, padding: 5 }}
-                    >
-                      Refresh
-                    </Text>
-                  </TouchableOpacity>
-                )}
+                ) : null}
               </View>
             ) : transcribeLoading ? (
               <View

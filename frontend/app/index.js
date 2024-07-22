@@ -1,11 +1,41 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, CommonActions } from "@react-navigation/native";
 import EmoicLogo from "./svgs/EmoicLogo";
 import Bg from "./svgs/Bg";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Home = () => {
   const navigation = useNavigation();
+  const [user, setUser] = useState(null);
+
+  const getUserData = async () => {
+    const value = await AsyncStorage.getItem("user");
+    setUser(JSON.parse(value));
+  };
+
+  useEffect(() => {
+    getUserData();
+  }, []);
+
+  const handleGetStarted = () => {
+    if (!user) {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: "Login" }],
+        }),
+      );
+      return;
+    }
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: "Dashboard" }],
+      }),
+    );
+  };
+
   return (
     <View
       style={{ flex: 1, borderColor: "#3E8B9A", borderWidth: 2, padding: 2 }}
@@ -45,7 +75,7 @@ const Home = () => {
           Let the music reflect the emotions..
         </Text>
         <TouchableOpacity
-          onPress={() => navigation.navigate("Dashboard")}
+          onPress={handleGetStarted}
           style={{
             backgroundColor: "#3E8B9A",
             alignItems: "center",
