@@ -1,12 +1,22 @@
 import { View, TouchableOpacity, Modal, Text } from "react-native";
-import React from "react";
-import { useNavigation } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
+import { useNavigation, CommonActions } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Footer = () => {
+  const [user, setUser] = useState(null);
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
+
+  const getUserData = async () => {
+    const value = await AsyncStorage.getItem("user");
+    setUser(JSON.parse(value));
+  };
+
+  useEffect(() => {
+    getUserData();
+  }, []);
 
   const handleDashboardPress = () => {
     navigation.navigate("Dashboard");
@@ -21,8 +31,21 @@ const Footer = () => {
     setModalVisible(false);
     navigation.navigate("UploadAudio");
   };
-  const handleLogoutPress = () => {
-    navigation.navigate("Login");
+  const handleLogoutPress = async () => {
+    if (!user) return;
+
+    try {
+      await AsyncStorage.removeItem("user");
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: "Login" }],
+        }),
+      );
+    } catch (error) {
+      // remove error
+      console.log(error);
+    }
   };
   return (
     <View
