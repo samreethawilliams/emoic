@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
+  ScrollView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Footer from "./components/footer";
@@ -15,6 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 import { RootSiblingParent } from "react-native-root-siblings";
 import { FontAwesome } from "@expo/vector-icons";
 import NothingHere from "./svgs/NothingHere";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
