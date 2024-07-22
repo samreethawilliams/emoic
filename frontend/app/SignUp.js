@@ -294,7 +294,15 @@ const SignUp = () => {
               onValueChange={setIsChecked}
               color={isChecked ? "#2f4f4f" : undefined}
             />
-            <Text> I agree to the terms and conditions</Text>
+            <Text>
+              {" "}
+              I agree to the{" "}
+              <TouchableOpacity onPress={() => navigation.navigate("Terms")}>
+                <Text style={{ color: "blue", marginVertical: -3 }}>
+                  terms and conditions
+                </Text>
+              </TouchableOpacity>
+            </Text>
           </View>
 
           <View style={{ marginTop: 18, marginBottom: 4 }}>
