@@ -9,12 +9,17 @@ import {
 import React, { useEffect, useState } from "react";
 import Footer from "./components/footer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { UPLOAD_SERVER } from "./utils/constants";
+import { TRANSCRIBE_SERVER, UPLOAD_SERVER } from "./utils/constants";
+import Toast from "react-native-root-toast";
+import { useNavigation } from "@react-navigation/native";
+import { RootSiblingParent } from "react-native-root-siblings";
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
   const [audioHistory, setAudioHistory] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [transcribeLoading, setTranscribeLoading] = useState(false);
+  const navigation = useNavigation();
 
   const getUserData = async () => {
     const value = await AsyncStorage.getItem("user");
@@ -61,137 +66,222 @@ const Dashboard = () => {
     getHistory();
   }, [user]);
 
-  const renderItem = ({ item }) => (
-    <View
-      style={{
-        backgroundColor: "white",
-        borderRadius: 8,
-        marginBottom: 20,
-        width: "100%",
-        padding: 10,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-      }}
-    >
-      <View>
-        <Text style={{ fontSize: 14, fontWeight: "bold", color: "#807e7e" }}>
-          Audio Name
-        </Text>
-        <Text style={{ fontSize: 16, marginTop: 8, color: "#000000" }}>
-          {item.name}
-        </Text>
-      </View>
-      <Text style={{ fontSize: 24 }}>{item.emotion}</Text>
-    </View>
-  );
+  const transcribe = async (fileName, fileUri) => {
+    console.log(fileName, fileUri);
+
+    setTranscribeLoading(true);
+
+    const [file] = fileName.split(".mp3");
+
+    console.log({
+      audioName: `${file}.wav`,
+      originalAudioFile: fileName,
+      userId: user.id,
+      fileUri,
+      saveToHistory: false,
+    });
+
+    try {
+      const fetchCall = await fetch(`${TRANSCRIBE_SERVER}/transcribe`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          audioName: `${file}.wav`,
+          originalAudioFile: fileName,
+          userId: user.id,
+          fileUri,
+          saveToHistory: false,
+        }),
+      });
+      const res = await fetchCall.json();
+      console.log("response from /transcribe: ", res);
+
+      if (
+        res.message === "Some error occured" ||
+        res.message === "Some database error occurred"
+      ) {
+        Toast.show(res.message + ". Please try again.", {
+          duration: Toast.durations.SHORT,
+        });
+      }
+
+      if (res.status === true) {
+        navigation.navigate("Player", {
+          audioName: fileName,
+          audioAuthor: user.name ?? "Unknown",
+          fileUri: fileUri,
+          transcript: res.transcript,
+        });
+      }
+
+      // success
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTranscribeLoading(false);
+    }
+  };
+
+  const renderItem = ({ item }) => {
+    return (
+      <TouchableOpacity onPress={() => transcribe(item.name, item.fileuri)}>
+        <View
+          style={{
+            backgroundColor: "white",
+            borderRadius: 8,
+            marginBottom: 20,
+            width: "100%",
+            padding: 10,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <View>
+            <Text
+              style={{ fontSize: 14, fontWeight: "bold", color: "#807e7e" }}
+            >
+              Audio Name
+            </Text>
+            <Text style={{ fontSize: 16, marginTop: 8, color: "#000000" }}>
+              {item.name}
+            </Text>
+          </View>
+          <Text style={{ fontSize: 24 }}>{item.emotion}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   return (
-    <View
-      style={{ flex: 1, borderColor: "#3E8B9A", borderWidth: 2, padding: 2 }}
-    >
+    <RootSiblingParent>
       <View
-        style={{
-          flex: 1,
-          alignItems: "center",
-          padding: 20,
-        }}
+        style={{ flex: 1, borderColor: "#3E8B9A", borderWidth: 2, padding: 2 }}
       >
         <View
           style={{
-            marginBottom: 20,
-            marginTop: 20,
-            alignContent: "center",
+            flex: 1,
+            alignItems: "center",
+            padding: 20,
           }}
         >
-          <Image
-            source={{
-              uri: "https://c8.alamy.com/zooms/9/d4c59d90389444e3b1166312d2f7fa51/p9mywr.jpg",
-            }}
+          <View
             style={{
-              width: 100,
-              height: 100,
-              borderRadius: 100,
-              marginRight: 30,
-            }}
-          />
-          {user ? (
-            <Text style={{ fontSize: 24, fontWeight: "bold", marginTop: 10 }}>
-              Hi, {user.name}
-            </Text>
-          ) : (
-            <Text style={{ fontSize: 24, fontWeight: "bold", marginTop: 10 }}>
-              Welcome
-            </Text>
-          )}
-        </View>
-        <View
-          style={{
-            width: "100%",
-            marginTop: 20,
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 20,
-              fontWeight: "bold",
               marginBottom: 20,
+              marginTop: 20,
+              alignContent: "center",
             }}
           >
-            Audio History
-          </Text>
-          {!audioHistory || (audioHistory && audioHistory.length === 0) ? (
-            <View style={{ marginTop: 20 }}>
-              <Text
+            <Image
+              source={{
+                uri: "https://c8.alamy.com/zooms/9/d4c59d90389444e3b1166312d2f7fa51/p9mywr.jpg",
+              }}
+              style={{
+                width: 100,
+                height: 100,
+                borderRadius: 100,
+                marginRight: 30,
+              }}
+            />
+            {user ? (
+              <Text style={{ fontSize: 24, fontWeight: "bold", marginTop: 10 }}>
+                Hi, {user.name}
+              </Text>
+            ) : (
+              <Text style={{ fontSize: 24, fontWeight: "bold", marginTop: 10 }}>
+                Welcome
+              </Text>
+            )}
+          </View>
+          <View
+            style={{
+              width: "100%",
+              marginTop: 20,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: "bold",
+                marginBottom: 20,
+              }}
+            >
+              Audio History
+            </Text>
+            {!audioHistory || (audioHistory && audioHistory.length === 0) ? (
+              <View style={{ marginTop: 20 }}>
+                <Text
+                  style={{
+                    fontSize: 15,
+                  }}
+                >
+                  Oops, no history currently available to display
+                </Text>
+                {loading ? (
+                  <ActivityIndicator
+                    size="small"
+                    color="#3E8B9A"
+                    style={{ marginTop: 30 }}
+                  />
+                ) : (
+                  <TouchableOpacity
+                    onPress={getHistory}
+                    style={{
+                      backgroundColor: "#3E8B9A",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      height: 48,
+                      borderRadius: 8,
+                      width: "100%",
+                      marginTop: 10,
+                    }}
+                  >
+                    <Text
+                      style={{ color: "#FFFFFF", fontSize: 18, padding: 5 }}
+                    >
+                      Refresh
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            ) : transcribeLoading ? (
+              <View
                 style={{
-                  fontSize: 15,
+                  marginBottom: 20,
+                  display: "flex",
+                  alignItems: "center",
                 }}
               >
-                Oops, no history currently available to display
-              </Text>
-              {loading ? (
                 <ActivityIndicator
                   size="small"
                   color="#3E8B9A"
                   style={{ marginTop: 30 }}
                 />
-              ) : (
-                <TouchableOpacity
-                  onPress={getHistory}
-                  style={{
-                    backgroundColor: "#3E8B9A",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    height: 48,
-                    borderRadius: 8,
-                    width: "100%",
-                    marginTop: 10,
-                  }}
-                >
-                  <Text style={{ color: "#FFFFFF", fontSize: 18, padding: 5 }}>
-                    Refresh
-                  </Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          ) : (
-            <View
-              style={{
-                padding: 10,
-                marginBottom: 20,
-              }}
-            >
-              <FlatList
-                data={audioHistory}
-                renderItem={renderItem}
-                keyExtractor={(item) => item.id}
-              />
-            </View>
-          )}
+                <Text style={{ color: "#807e7e", fontSize: 16, marginTop: 20 }}>
+                  Detecting emotions...
+                </Text>
+              </View>
+            ) : (
+              <View
+                style={{
+                  marginBottom: 20,
+                }}
+              >
+                <FlatList
+                  data={audioHistory}
+                  renderItem={renderItem}
+                  keyExtractor={(item) => item.id}
+                />
+              </View>
+            )}
+          </View>
+          <Footer />
         </View>
-        <Footer />
       </View>
-    </View>
+    </RootSiblingParent>
   );
 };
 

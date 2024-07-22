@@ -89,7 +89,8 @@ app.get("/", (req, res) => {
 });
 
 app.post("/transcribe", async (req, res) => {
-  const { audioName, originalAudioFile, userId } = req.body;
+  const { audioName, originalAudioFile, userId, saveToHistory, fileUri } =
+    req.body;
   // Need to provide exact path to your audio file.
   const filePath = path.resolve(__dirname, `uploads/${audioName}`);
 
@@ -132,14 +133,22 @@ app.post("/transcribe", async (req, res) => {
 
     console.log("freqScore: ", freqScore);
 
+    // no need to save to database
+    if (!saveToHistory) {
+      return res.send({
+        status: true,
+        transcript: transcriptWithTimeStamp,
+      });
+    }
+
     try {
       await client.query(
         `
         insert into audios
-        (name, emotion, userId)
+        (name, emotion, userId, fileUri)
         values
-        ($1, $2, $3)`,
-        [originalAudioFile, freqEmotion, userId]
+        ($1, $2, $3, $4)`,
+        [originalAudioFile, freqEmotion, userId, fileUri]
       );
     } catch (err) {
       console.error(err);

@@ -168,7 +168,11 @@ const AudioRecord = () => {
             duration: Toast.durations.SHORT,
           },
         );
-        await getTranscript(res.convertedAudioFile, res.originalAudioFile);
+        await getTranscript(
+          res.convertedAudioFile,
+          res.originalAudioFile,
+          recordedAudio.file,
+        );
       }
     } catch (error) {
       console.error(error);
@@ -178,7 +182,11 @@ const AudioRecord = () => {
   }
 
   // api call
-  async function getTranscript(audioNameToTranscribe, originalAudioFile) {
+  async function getTranscript(
+    audioNameToTranscribe,
+    originalAudioFile,
+    fileUri,
+  ) {
     setLoading(true);
     console.log(audioNameToTranscribe);
     console.log(TRANSCRIBE_SERVER);
@@ -193,6 +201,8 @@ const AudioRecord = () => {
           audioName: audioNameToTranscribe,
           originalAudioFile,
           userId: user.id,
+          saveToHistory: true,
+          fileUri,
         }),
       });
       const res = await fetchCall.json();
