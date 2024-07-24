@@ -116,12 +116,32 @@ const Player = () => {
   function getEmotionEmoji(currentTranscript) {
     if (currentTranscript.sentiment.score === 0) {
       return "😐";
+    } else if (currentTranscript.sentiment.score === -1) {
+      return "😕";
+    } else if (currentTranscript.sentiment.score === -2) {
+      return "😟";
+    } else if (currentTranscript.sentiment.score === -3) {
+      return "😢";
+    } else if (currentTranscript.sentiment.score === -4) {
+      return "😭";
+    } else if (currentTranscript.sentiment.score === -5) {
+      return "😡";
     } else if (currentTranscript.sentiment.score < 0) {
       return "😔";
-    } else if (currentTranscript.sentiment.score > 0) {
-      return "😄";
-    } else {
+    } else if (currentTranscript.sentiment.score === 1) {
+      return "😏";
+    } else if (currentTranscript.sentiment.score === 2) {
+      return "😌";
+    } else if (currentTranscript.sentiment.score === 3) {
       return "🙂";
+    } else if (currentTranscript.sentiment.score === 4) {
+      return "😃";
+    } else if (currentTranscript.sentiment.score === 5) {
+      return "😄";
+    } else if (currentTranscript.sentiment.score > 0) {
+      return "😊";
+    } else {
+      return "😶";
     }
   }
 
